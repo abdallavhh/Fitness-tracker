@@ -18,6 +18,189 @@
             <converters:InverseBoolToVisibilityConverter x:Key="InverseBoolToVis"/>
             <converters:NavKeyActiveMultiConverter x:Key="NavKeyActive"/>
 
+            <!-- Global design tokens -->
+            <FontFamily x:Key="Ft.Font.App">Segoe UI</FontFamily>
+            <Color x:Key="Color.PrimaryTeal">#11B6A4</Color>
+            <Color x:Key="Color.PrimaryMint">#59D6C4</Color>
+            <Color x:Key="Color.SidebarNavy">#0D2238</Color>
+            <Color x:Key="Color.AppBackground">#F4F8FC</Color>
+            <Color x:Key="Color.CardWhite">#FFFFFF</Color>
+            <Color x:Key="Color.TextHeading">#1E293B</Color>
+            <Color x:Key="Color.TextMuted">#8A94A6</Color>
+            <Color x:Key="Color.DangerRed">#EF4444</Color>
+            <Color x:Key="Color.WaterBlue">#3B82F6</Color>
+            <Color x:Key="Color.WarningOrange">#F59E0B</Color>
+
+            <SolidColorBrush x:Key="Brush.PrimaryTeal" Color="{StaticResource Color.PrimaryTeal}"/>
+            <SolidColorBrush x:Key="Brush.PrimaryMint" Color="{StaticResource Color.PrimaryMint}"/>
+            <SolidColorBrush x:Key="Brush.SidebarNavy" Color="{StaticResource Color.SidebarNavy}"/>
+            <SolidColorBrush x:Key="Brush.AppBackground" Color="{StaticResource Color.AppBackground}"/>
+            <SolidColorBrush x:Key="Brush.CardWhite" Color="{StaticResource Color.CardWhite}"/>
+            <SolidColorBrush x:Key="Brush.TextHeading" Color="{StaticResource Color.TextHeading}"/>
+            <SolidColorBrush x:Key="Brush.TextMuted" Color="{StaticResource Color.TextMuted}"/>
+            <SolidColorBrush x:Key="Brush.DangerRed" Color="{StaticResource Color.DangerRed}"/>
+            <SolidColorBrush x:Key="Brush.WaterBlue" Color="{StaticResource Color.WaterBlue}"/>
+            <SolidColorBrush x:Key="Brush.WarningOrange" Color="{StaticResource Color.WarningOrange}"/>
+            <SolidColorBrush x:Key="Brush.SidebarHover" Color="#1B3553"/>
+            <SolidColorBrush x:Key="Brush.SidebarActive" Color="#134769"/>
+
+            <!-- Compatibility aliases for existing view resources -->
+            <SolidColorBrush x:Key="Ft.Brush.Primary" Color="{StaticResource Color.PrimaryTeal}"/>
+            <SolidColorBrush x:Key="Ft.Brush.Page" Color="{StaticResource Color.AppBackground}"/>
+            <SolidColorBrush x:Key="Ft.Brush.SidebarBg" Color="{StaticResource Color.SidebarNavy}"/>
+            <SolidColorBrush x:Key="Ft.Brush.SidebarText" Color="#E2E8F0"/>
+            <SolidColorBrush x:Key="Ft.Brush.SidebarHover" Color="#1B3553"/>
+            <SolidColorBrush x:Key="Ft.Brush.Heading" Color="{StaticResource Color.TextHeading}"/>
+            <SolidColorBrush x:Key="Ft.Brush.Muted" Color="{StaticResource Color.TextMuted}"/>
+            <SolidColorBrush x:Key="Ft.Brush.Danger" Color="{StaticResource Color.DangerRed}"/>
+            <SolidColorBrush x:Key="Ft.Brush.Info" Color="{StaticResource Color.WaterBlue}"/>
+            <SolidColorBrush x:Key="Ft.Brush.Warning" Color="{StaticResource Color.WarningOrange}"/>
+
+            <!-- Typography -->
+            <Style x:Key="H1TextStyle" TargetType="TextBlock">
+                <Setter Property="FontSize" Value="30"/>
+                <Setter Property="FontWeight" Value="Bold"/>
+                <Setter Property="Foreground" Value="{StaticResource Brush.TextHeading}"/>
+            </Style>
+
+            <Style x:Key="CardTitleTextStyle" TargetType="TextBlock">
+                <Setter Property="FontSize" Value="20"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
+                <Setter Property="Foreground" Value="{StaticResource Brush.TextHeading}"/>
+            </Style>
+
+            <Style x:Key="MutedLabelTextStyle" TargetType="TextBlock">
+                <Setter Property="FontSize" Value="13"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
+                <Setter Property="Foreground" Value="{StaticResource Brush.TextMuted}"/>
+            </Style>
+
+            <Style x:Key="Fds.Text.SidebarNav" TargetType="TextBlock" BasedOn="{StaticResource MutedLabelTextStyle}">
+                <Setter Property="Foreground" Value="#E7EEF7"/>
+                <Setter Property="FontSize" Value="15"/>
+                <Setter Property="FontWeight" Value="Medium"/>
+            </Style>
+
+            <!-- Components -->
+            <Style x:Key="CardStyle" TargetType="Border">
+                <Setter Property="CornerRadius" Value="16"/>
+                <Setter Property="Padding" Value="24"/>
+                <Setter Property="Background" Value="{StaticResource Brush.CardWhite}"/>
+                <Setter Property="Effect">
+                    <Setter.Value>
+                        <DropShadowEffect Color="#1A0F172A" BlurRadius="24" ShadowDepth="2" Opacity="0.6"/>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="SoftShadowSidebar" TargetType="Border">
+                <Setter Property="Effect">
+                    <Setter.Value>
+                        <DropShadowEffect Color="#14000000" BlurRadius="12" ShadowDepth="0" Opacity="0.12"/>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="PrimaryButtonStyle" TargetType="Button">
+                <Setter Property="Background" Value="{StaticResource Brush.PrimaryTeal}"/>
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="BorderBrush" Value="{StaticResource Brush.PrimaryTeal}"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="Padding" Value="16,10"/>
+                <Setter Property="MinHeight" Value="42"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="ButtonBorder"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="10"
+                                    SnapsToDevicePixels="True">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="ButtonBorder" Property="Background" Value="{StaticResource Brush.PrimaryMint}"/>
+                                    <Setter TargetName="ButtonBorder" Property="BorderBrush" Value="{StaticResource Brush.PrimaryMint}"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter TargetName="ButtonBorder" Property="Opacity" Value="0.92"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter TargetName="ButtonBorder" Property="Opacity" Value="0.55"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- Canonical keys for action buttons (reference design) -->
+            <Style x:Key="App.Styles.Button.Primary" TargetType="Button" BasedOn="{StaticResource PrimaryButtonStyle}"/>
+
+            <Style x:Key="App.Styles.Button.Ghost.Flat" TargetType="Button">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Foreground" Value="{StaticResource Brush.PrimaryTeal}"/>
+                <Setter Property="Padding" Value="8,4"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Foreground" Value="{StaticResource Brush.TextHeading}"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style x:Key="GhostButtonStyle" TargetType="Button">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Foreground" Value="{StaticResource Brush.TextHeading}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource Brush.TextMuted}"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="Padding" Value="16,10"/>
+                <Setter Property="MinHeight" Value="42"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="ButtonBorder"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="10"
+                                    SnapsToDevicePixels="True">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="ButtonBorder" Property="Background" Value="#0F64748B"/>
+                                    <Setter TargetName="ButtonBorder" Property="BorderBrush" Value="{StaticResource Brush.PrimaryTeal}"/>
+                                    <Setter Property="Foreground" Value="{StaticResource Brush.PrimaryTeal}"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter TargetName="ButtonBorder" Property="Opacity" Value="0.9"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter TargetName="ButtonBorder" Property="Opacity" Value="0.55"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
             <Style TargetType="TextElement">
                 <Setter Property="FontFamily" Value="{StaticResource Ft.Font.App}"/>
             </Style>

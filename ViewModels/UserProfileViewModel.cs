@@ -8,6 +8,7 @@ namespace FitnessTracker.ViewModels;
 public sealed class UserProfileViewModel : ViewModelBase
 {
     private readonly MainWindowViewModel _shell;
+    private bool _isEditMode;
     private string _username = string.Empty;
     private string _gender = string.Empty;
     private string _age = string.Empty;
@@ -22,7 +23,20 @@ public sealed class UserProfileViewModel : ViewModelBase
         _shell = shell;
         LoadFromStore();
         GoBackCommand = new RelayCommand(_ => _shell.NavigateTo("Dashboard"));
-        SaveProfileCommand = new RelayCommand(_ => SaveProfile());
+        EditCommand = new RelayCommand(_ => IsEditMode = true, _ => !IsEditMode);
+        SaveCommand = new RelayCommand(_ => SaveProfile(), _ => IsEditMode);
+    }
+
+    public bool IsEditMode
+    {
+        get => _isEditMode;
+        set
+        {
+            if (!SetProperty(ref _isEditMode, value))
+                return;
+            EditCommand.RaiseCanExecuteChanged();
+            SaveCommand.RaiseCanExecuteChanged();
+        }
     }
 
     public string Username
@@ -74,7 +88,8 @@ public sealed class UserProfileViewModel : ViewModelBase
     }
 
     public RelayCommand GoBackCommand { get; }
-    public RelayCommand SaveProfileCommand { get; }
+    public RelayCommand EditCommand { get; }
+    public RelayCommand SaveCommand { get; }
 
     private void LoadFromStore()
     {
@@ -135,5 +150,6 @@ public sealed class UserProfileViewModel : ViewModelBase
             AppSession.DisplayName = p.Username;
 
         MessageBox.Show("Your profile has been saved.", "Profile", MessageBoxButton.OK, MessageBoxImage.Information);
+        IsEditMode = false;
     }
 }

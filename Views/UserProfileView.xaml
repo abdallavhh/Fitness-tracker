@@ -5,45 +5,169 @@
              Background="{StaticResource Ft.Brush.Page}"
              FontFamily="{StaticResource Ft.Font.App}">
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Padding="0">
-        <StackPanel MaxWidth="600" Margin="40,30,40,30" HorizontalAlignment="Stretch">
-            <StackPanel Margin="0,0,0,20">
-                <Button HorizontalAlignment="Left" Style="{StaticResource MaterialDesignIconButton}"
-                        Command="{Binding GoBackCommand}" ToolTip="Back">
-                    <materialDesign:PackIcon Kind="ArrowLeft" Width="24" Height="24"/>
-                </Button>
-                <Button HorizontalAlignment="Stretch" Margin="0,10,0,0" Style="{StaticResource Ft.Btn.Primary}"
-                        Padding="16,10" Content="Save profile" Command="{Binding SaveProfileCommand}"/>
-            </StackPanel>
+    <UserControl.Resources>
+        <Style x:Key="ProfileValueTextBoxStyle" TargetType="TextBox">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#212121"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="RootBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4"
+                                Padding="{TemplateBinding Padding}">
+                            <ScrollViewer x:Name="PART_ContentHost"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsEditMode}" Value="True">
+                    <Setter Property="BorderThickness" Value="1"/>
+                    <Setter Property="BorderBrush" Value="#E0E0E0"/>
+                    <Setter Property="Background" Value="White"/>
+                    <Setter Property="IsReadOnly" Value="False"/>
+                    <Setter Property="Padding" Value="8,4"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
 
-            <Border Style="{StaticResource Ft.Card}" HorizontalAlignment="Center" Padding="24" Margin="0,0,0,24">
-                <Border Width="96" Height="96" CornerRadius="48" Background="{StaticResource Ft.Brush.SurfaceSubtle}"
-                        BorderBrush="{StaticResource Ft.Brush.Border}" BorderThickness="1">
-                    <materialDesign:PackIcon Kind="Account" Width="48" Height="48" Foreground="{StaticResource Ft.Brush.Label}"
-                                             HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                </Border>
-            </Border>
+    </UserControl.Resources>
 
-            <Border Style="{StaticResource Ft.Card}">
-                <StackPanel>
-                    <TextBox materialDesign:HintAssist.Hint="Username" Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                             Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,12"/>
-                    <TextBox materialDesign:HintAssist.Hint="Gender" Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                             Text="{Binding Gender, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,12"/>
-                    <TextBox materialDesign:HintAssist.Hint="Age" Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                             Text="{Binding Age, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,12"/>
-                    <TextBox materialDesign:HintAssist.Hint="Height (cm)" Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                             Text="{Binding HeightCm, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,12"/>
-                    <TextBox materialDesign:HintAssist.Hint="Weight (kg)" Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                             Text="{Binding WeightKg, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,12"/>
-                    <TextBox materialDesign:HintAssist.Hint="Medical condition" Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                             Text="{Binding MedicalCondition, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,12"/>
-                    <TextBox materialDesign:HintAssist.Hint="Dietary preference" Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                             Text="{Binding DietaryPreference, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,12"/>
-                    <TextBox materialDesign:HintAssist.Hint="Target weight (kg)" Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                             Text="{Binding TargetWeightKg, UpdateSourceTrigger=PropertyChanged}"/>
-                </StackPanel>
-            </Border>
-        </StackPanel>
-    </ScrollViewer>
+    <Grid Margin="28">
+        <Border Background="White"
+                CornerRadius="16"
+                Padding="30"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Top">
+            <Border.Effect>
+                <DropShadowEffect Color="#222222"
+                                  Opacity="0.05"
+                                  BlurRadius="25"
+                                  ShadowDepth="5"
+                                  Direction="270"/>
+            </Border.Effect>
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Column="0"
+                            Width="36"
+                            Height="36"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Command="{Binding GoBackCommand}"
+                            Cursor="Hand"
+                            VerticalAlignment="Top"
+                            HorizontalAlignment="Left">
+                        <materialDesign:PackIcon Kind="ArrowLeft"
+                                                 Width="22"
+                                                 Height="22"
+                                                 Foreground="#212121"/>
+                    </Button>
+
+                    <Ellipse Grid.Column="1"
+                             Width="80"
+                             Height="80"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Top"
+                             Stroke="#E5E7EB"
+                             StrokeThickness="1">
+                        <Ellipse.Fill>
+                            <ImageBrush Stretch="UniformToFill">
+                                <ImageBrush.ImageSource>
+                                    <DrawingImage>
+                                        <DrawingImage.Drawing>
+                                            <GeometryDrawing Brush="#EAF4FF">
+                                                <GeometryDrawing.Geometry>
+                                                    <RectangleGeometry Rect="0,0,80,80"/>
+                                                </GeometryDrawing.Geometry>
+                                            </GeometryDrawing>
+                                        </DrawingImage.Drawing>
+                                    </DrawingImage>
+                                </ImageBrush.ImageSource>
+                            </ImageBrush>
+                        </Ellipse.Fill>
+                    </Ellipse>
+
+                    <StackPanel Grid.Column="2"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top"
+                                Margin="0,0,0,0">
+                        <Button Content="Edit Profile"
+                                Style="{StaticResource App.Styles.Button.Ghost.Flat}"
+                                Command="{Binding EditCommand}"
+                                HorizontalAlignment="Right"
+                                Visibility="{Binding IsEditMode, Converter={StaticResource InverseBoolToVis}}"/>
+
+                        <Button Content="Save"
+                                Style="{StaticResource App.Styles.Button.Primary}"
+                                Command="{Binding SaveCommand}"
+                                HorizontalAlignment="Right"
+                                Margin="0,4,0,0"
+                                Visibility="{Binding IsEditMode, Converter={StaticResource BoolToVis}}"/>
+                    </StackPanel>
+                </Grid>
+
+                <Grid Grid.Row="1" Margin="0,40,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="160"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Username" Foreground="#616161" FontSize="14" VerticalAlignment="Center" Margin="0,0,0,16"/>
+                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ProfileValueTextBoxStyle}" Margin="0,0,0,16"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Gender" Foreground="#616161" FontSize="14" VerticalAlignment="Center" Margin="0,0,0,16"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Gender, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ProfileValueTextBoxStyle}" Margin="0,0,0,16"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Age" Foreground="#616161" FontSize="14" VerticalAlignment="Center" Margin="0,0,0,16"/>
+                    <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Age, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ProfileValueTextBoxStyle}" Margin="0,0,0,16"/>
+
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Height" Foreground="#616161" FontSize="14" VerticalAlignment="Center" Margin="0,0,0,16"/>
+                    <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding HeightCm, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ProfileValueTextBoxStyle}" Margin="0,0,0,16"/>
+
+                    <TextBlock Grid.Row="4" Grid.Column="0" Text="Weight" Foreground="#616161" FontSize="14" VerticalAlignment="Center" Margin="0,0,0,16"/>
+                    <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding WeightKg, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ProfileValueTextBoxStyle}" Margin="0,0,0,16"/>
+
+                    <TextBlock Grid.Row="5" Grid.Column="0" Text="Medical Condition" Foreground="#616161" FontSize="14" VerticalAlignment="Center" Margin="0,0,0,16"/>
+                    <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding MedicalCondition, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ProfileValueTextBoxStyle}" Margin="0,0,0,16"/>
+
+                    <TextBlock Grid.Row="6" Grid.Column="0" Text="Dietary Preference" Foreground="#616161" FontSize="14" VerticalAlignment="Center" Margin="0,0,0,16"/>
+                    <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding DietaryPreference, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ProfileValueTextBoxStyle}" Margin="0,0,0,16"/>
+
+                    <TextBlock Grid.Row="7" Grid.Column="0" Text="Target Weight" Foreground="#616161" FontSize="14" VerticalAlignment="Center" Margin="0,0,0,16"/>
+                    <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding TargetWeightKg, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ProfileValueTextBoxStyle}" Margin="0,0,0,16"/>
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
 </UserControl>

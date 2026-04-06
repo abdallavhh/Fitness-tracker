@@ -18,11 +18,28 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Margin="0,0,0,16">
-            <TextBlock Text="Meals" FontSize="26" FontWeight="Bold" Foreground="{StaticResource Ft.Brush.Heading}" TextWrapping="Wrap"/>
-            <Button HorizontalAlignment="Stretch" Margin="0,10,0,0" Style="{StaticResource Ft.Btn.Primary}"
-                    Content="+ Add Meal" Command="{Binding AddMealCommand}"/>
-        </StackPanel>
+        <Border Grid.Row="0" Style="{StaticResource CardStyle}" Margin="0,0,0,16" Padding="24">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0"
+                           Text="Meals"
+                           FontSize="26"
+                           FontWeight="Bold"
+                           Foreground="{StaticResource Ft.Brush.Heading}"
+                           TextWrapping="Wrap"
+                           VerticalAlignment="Center"/>
+                <Button Grid.Column="1"
+                        Content="+ Add Meal"
+                        Style="{StaticResource App.Styles.Button.Primary}"
+                        Command="{Binding AddMealCommand}"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Margin="16,0,0,0"/>
+            </Grid>
+        </Border>
 
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
             <ItemsControl ItemsSource="{Binding MealsView}">
