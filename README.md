@@ -29,7 +29,7 @@ A modern .NET 8 WPF desktop app for fitness and health tracking, with separate u
 ## Project Structure
 
 ```text
-Project1/
+Fitness-tracker/
 ├── App.xaml
 ├── MainWindow.xaml
 ├── MainWindow.xaml.cs
