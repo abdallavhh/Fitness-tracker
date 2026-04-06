@@ -1,0 +1,147 @@
+<UserControl x:Class="FitnessTracker.Views.ManageUsersView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             Background="{StaticResource Ft.Brush.Page}"
+             FontFamily="{StaticResource Ft.Font.App}"
+             SizeChanged="ManageUsersView_OnSizeChanged">
+
+    <UserControl.Resources>
+        <Style x:Key="GridHeaderTeal" TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="{StaticResource Ft.Brush.Primary}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="BorderThickness" Value="0,0,1,0"/>
+            <Setter Property="BorderBrush" Value="#008F79"/>
+        </Style>
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#F3F4F6"/>
+            <Setter Property="Foreground" Value="{StaticResource Ft.Brush.Label}"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Ft.Brush.Border}"/>
+        </Style>
+        <Style TargetType="DataGridCell">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="10,10"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="DataGrid">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="RowBackground" Value="White"/>
+            <Setter Property="AlternatingRowBackground" Value="#F9FAFB"/>
+            <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="{StaticResource Ft.Brush.Border}"/>
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="CanUserAddRows" Value="False"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+            <Setter Property="SelectionMode" Value="Single"/>
+            <Setter Property="RowHeight" Value="56"/>
+        </Style>
+    </UserControl.Resources>
+
+    <ScrollViewer x:Name="PageScroll" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+                  Padding="0">
+        <Grid Margin="40,30,40,30"
+              HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch"
+              MinWidth="300"
+              MinHeight="420">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0"
+                        HorizontalAlignment="Left"
+                        Margin="0,0,0,20">
+                <TextBlock Text="Manage Users (Admin)" FontSize="28" FontWeight="Bold" Foreground="{StaticResource Ft.Brush.Heading}" HorizontalAlignment="Left" TextWrapping="Wrap"/>
+                <TextBlock Text="{Binding Subtitle}" FontSize="14" Foreground="{StaticResource Ft.Brush.Label}" Margin="0,6,0,0" HorizontalAlignment="Left" TextWrapping="Wrap"/>
+                <Button Content="+ Add User"
+                        Margin="0,12,0,0"
+                        HorizontalAlignment="Left"
+                        MinHeight="42"
+                        Style="{StaticResource Ft.Btn.Primary}"
+                        Command="{Binding AddUserCommand}"/>
+            </StackPanel>
+
+            <Border Grid.Row="1" Style="{StaticResource Ft.Card}" Padding="20" HorizontalAlignment="Stretch">
+                <StackPanel>
+                    <!-- Filters: two columns on wide, one column on narrow (code-behind) -->
+                    <Grid x:Name="FilterGrid" Margin="0,0,0,4">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition x:Name="FilterCol0" Width="*"/>
+                            <ColumnDefinition x:Name="FilterCol1" Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="SearchBox" Grid.Row="0" Grid.Column="0"
+                                 materialDesign:HintAssist.Hint="Search username or email"
+                                 Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                 Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,12"/>
+                        <TextBox x:Name="IdFilterBox" Grid.Row="0" Grid.Column="1"
+                                 materialDesign:HintAssist.Hint="User ID (exact match)"
+                                 Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                 Text="{Binding IdFilterText, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,12"/>
+                    </Grid>
+
+                    <TextBlock Text="{Binding IdSearchMessage}" Foreground="#DC2626" FontSize="13" Margin="0,0,0,4" TextWrapping="Wrap"
+                               Visibility="{Binding ShowIdSearchMessage, Converter={StaticResource BoolToVis}}"/>
+
+                    <TextBlock Text="{Binding FooterText}" FontSize="13" Foreground="{StaticResource Ft.Brush.Label}" Margin="0,4,0,12" TextWrapping="Wrap"/>
+
+                    <Border Background="#FAFAFA" CornerRadius="12" Padding="4" SnapsToDevicePixels="True" HorizontalAlignment="Stretch">
+                        <DataGrid ItemsSource="{Binding UsersView}"
+                                  MinHeight="220"
+                                  MaxHeight="560"
+                                  HorizontalScrollBarVisibility="Auto"
+                                  VerticalScrollBarVisibility="Auto">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="56" MinWidth="48" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="Username" Binding="{Binding Username}" Width="*" MinWidth="100" IsReadOnly="True">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="FontWeight" Value="SemiBold"/>
+                                            <Setter Property="Foreground" Value="{StaticResource Ft.Brush.Heading}"/>
+                                            <Setter Property="TextWrapping" Value="NoWrap"/>
+                                            <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="2*" MinWidth="140" IsReadOnly="True">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Foreground" Value="{StaticResource Ft.Brush.Label}"/>
+                                            <Setter Property="TextWrapping" Value="NoWrap"/>
+                                            <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                                <DataGridTemplateColumn Header="Actions" MinWidth="148" Width="SizeToCells" IsReadOnly="True"
+                                                        HeaderStyle="{StaticResource GridHeaderTeal}">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Button Content="Edit" Style="{StaticResource Ft.Btn.Admin.PillTeal}" Margin="0,0,8,0"
+                                                        Command="{Binding DataContext.EditUserCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                        CommandParameter="{Binding}"/>
+                                                <Button Content="Delete" Style="{StaticResource Ft.Btn.Admin.PillDanger}"
+                                                        Command="{Binding DataContext.DeleteUserCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                        CommandParameter="{Binding}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Border>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,229 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <FontFamily x:Key="Ft.Font.App">Segoe UI Variable Display, Segoe UI Variable Text, Segoe UI, Roboto</FontFamily>
+
+    <!-- Brand teal -->
+    <Color x:Key="Ft.Color.Primary">#FF00A693</Color>
+    <Color x:Key="Ft.Color.PrimaryHover">#FF008F79</Color>
+    <Color x:Key="Ft.Color.PrimaryPressed">#FF007A69</Color>
+
+    <SolidColorBrush x:Key="Ft.Brush.Primary" Color="{StaticResource Ft.Color.Primary}"/>
+    <SolidColorBrush x:Key="Ft.Brush.PrimaryHover" Color="{StaticResource Ft.Color.PrimaryHover}"/>
+    <SolidColorBrush x:Key="Ft.Brush.PrimaryPressed" Color="{StaticResource Ft.Color.PrimaryPressed}"/>
+    <SolidColorBrush x:Key="Ft.Brush.PrimarySoft" Color="#3300A693"/>
+
+    <!-- Surfaces -->
+    <SolidColorBrush x:Key="Ft.Brush.Page" Color="#FFF9FAFB"/>
+    <SolidColorBrush x:Key="Ft.Brush.Card" Color="#FFFFFFFF"/>
+    <SolidColorBrush x:Key="Ft.Brush.SurfaceSubtle" Color="#FFF3F4F6"/>
+    <SolidColorBrush x:Key="Ft.Brush.SurfaceTint" Color="#FFF0FDFA"/>
+
+    <!-- Text: headings #212121, labels #616161 -->
+    <SolidColorBrush x:Key="Ft.Brush.Heading" Color="#FF212121"/>
+    <SolidColorBrush x:Key="Ft.Brush.Label" Color="#FF616161"/>
+    <SolidColorBrush x:Key="Ft.Brush.Text" Color="#FF212121"/>
+    <SolidColorBrush x:Key="Ft.Brush.TextSecondary" Color="#FF616161"/>
+    <SolidColorBrush x:Key="Ft.Brush.TextMuted" Color="#FF9E9E9E"/>
+
+    <SolidColorBrush x:Key="Ft.Brush.Border" Color="#FFE5E7EB"/>
+    <SolidColorBrush x:Key="Ft.Brush.BorderLight" Color="#FFF3F4F6"/>
+
+    <!-- Typography hierarchy for dashboard cards -->
+    <Style x:Key="CardTitleStyle" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Ft.Font.App}"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="Foreground" Value="{StaticResource Ft.Brush.Heading}"/>
+        <Setter Property="TextOptions.TextFormattingMode" Value="Ideal"/>
+        <Setter Property="TextOptions.TextRenderingMode" Value="ClearType"/>
+    </Style>
+
+    <Style x:Key="HighlightNumberStyle" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Ft.Font.App}"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="FontSize" Value="28"/>
+        <Setter Property="Foreground" Value="{StaticResource Ft.Brush.Heading}"/>
+        <Setter Property="TextOptions.TextFormattingMode" Value="Ideal"/>
+        <Setter Property="TextOptions.TextRenderingMode" Value="ClearType"/>
+    </Style>
+
+    <Style x:Key="HighlightNumberTealStyle" TargetType="TextBlock" BasedOn="{StaticResource HighlightNumberStyle}">
+        <Setter Property="Foreground" Value="{StaticResource Ft.Brush.Primary}"/>
+    </Style>
+
+    <Style x:Key="SubtextLabelStyle" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Ft.Font.App}"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="Foreground" Value="{StaticResource Ft.Brush.Label}"/>
+        <Setter Property="TextOptions.TextFormattingMode" Value="Ideal"/>
+        <Setter Property="TextOptions.TextRenderingMode" Value="ClearType"/>
+    </Style>
+
+    <SolidColorBrush x:Key="Ft.Brush.ChartMuted" Color="#FFB2DFDB"/>
+    <SolidColorBrush x:Key="Ft.Brush.ChartGrid" Color="#FFE5E7EB"/>
+
+    <!-- Sidebar: dark gray per mockup -->
+    <SolidColorBrush x:Key="Ft.Brush.SidebarBg" Color="#FF212121"/>
+    <SolidColorBrush x:Key="Ft.Brush.SidebarHover" Color="#FF2C2C2C"/>
+    <SolidColorBrush x:Key="Ft.Brush.SidebarText" Color="#FFB0B0B0"/>
+
+    <!-- ═══ Soft shadow system (reference design) ═══ -->
+
+    <!-- 1) Main content cards -->
+    <DropShadowEffect x:Key="SoftShadow.Effect.MainCard"
+                      Color="Black" Opacity="0.08"
+                      BlurRadius="20" ShadowDepth="4" Direction="270"/>
+
+    <Style x:Key="SoftShadowMainCard" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource Ft.Brush.Card}"/>
+        <Setter Property="CornerRadius" Value="16"/>
+        <Setter Property="Effect" Value="{StaticResource SoftShadow.Effect.MainCard}"/>
+    </Style>
+
+    <!-- 2) Inner list rows (meals, exercises, health metrics) -->
+    <DropShadowEffect x:Key="SoftShadow.Effect.ListItem"
+                      Color="Black" Opacity="0.05"
+                      BlurRadius="10" ShadowDepth="2" Direction="270"/>
+
+    <Style x:Key="SoftShadowListItem" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource Ft.Brush.Card}"/>
+        <Setter Property="CornerRadius" Value="12"/>
+        <Setter Property="Effect" Value="{StaticResource SoftShadow.Effect.ListItem}"/>
+    </Style>
+
+    <!-- 3) Primary action buttons -->
+    <DropShadowEffect x:Key="SoftShadow.Effect.ActionButton"
+                      Color="Black" Opacity="0.15"
+                      BlurRadius="8" ShadowDepth="2" Direction="270"/>
+
+    <Style x:Key="SoftShadowActionButton" TargetType="Button">
+        <Setter Property="FontFamily" Value="{StaticResource Ft.Font.App}"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Padding" Value="20,12"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Bd"
+                            Background="{StaticResource Ft.Brush.Primary}"
+                            CornerRadius="10"
+                            Padding="{TemplateBinding Padding}"
+                            Effect="{StaticResource SoftShadow.Effect.ActionButton}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource Ft.Brush.PrimaryHover}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource Ft.Brush.PrimaryPressed}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Bd" Property="Opacity" Value="0.55"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- 4) Sidebar: shadow toward main content -->
+    <DropShadowEffect x:Key="SoftShadow.Effect.Sidebar"
+                      Color="Black" Opacity="0.1"
+                      BlurRadius="15" ShadowDepth="3" Direction="0"/>
+
+    <Style x:Key="SoftShadowSidebar" TargetType="Border">
+        <Setter Property="Effect" Value="{StaticResource SoftShadow.Effect.Sidebar}"/>
+    </Style>
+
+    <!-- Legacy keys: map to soft shadows for existing XAML -->
+    <DropShadowEffect x:Key="Ft.Shadow.Card" Color="Black" Opacity="0.08" BlurRadius="20" ShadowDepth="4" Direction="270"/>
+    <DropShadowEffect x:Key="Ft.Shadow.Soft" Color="Black" Opacity="0.05" BlurRadius="10" ShadowDepth="2" Direction="270"/>
+
+    <!-- App card shell = main soft card + default padding -->
+    <Style x:Key="Ft.Card" TargetType="Border" BasedOn="{StaticResource SoftShadowMainCard}">
+        <Setter Property="Padding" Value="16"/>
+    </Style>
+
+    <!-- Alias for page-level white cards (same shadow + padding base as Ft.Card) -->
+    <Style x:Key="SoftCardStyle" TargetType="Border" BasedOn="{StaticResource Ft.Card}"/>
+
+    <Style x:Key="Ft.Btn.Primary" TargetType="Button" BasedOn="{StaticResource SoftShadowActionButton}"/>
+
+    <Style x:Key="Ft.Btn.Primary.Large" TargetType="Button" BasedOn="{StaticResource SoftShadowActionButton}">
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="Height" Value="48"/>
+        <Setter Property="Padding" Value="0,14"/>
+    </Style>
+
+    <Style x:Key="Ft.SearchBar" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource Ft.Brush.Card}"/>
+        <Setter Property="CornerRadius" Value="12"/>
+        <Setter Property="Padding" Value="12,10"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Ft.Brush.Border}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Effect" Value="{StaticResource SoftShadow.Effect.ListItem}"/>
+    </Style>
+
+    <!-- Admin table: pill actions (mockup: rounded teal / red) -->
+    <Style x:Key="Ft.Btn.Admin.PillTeal" TargetType="Button">
+        <Setter Property="FontFamily" Value="{StaticResource Ft.Font.App}"/>
+        <Setter Property="Foreground" Value="{StaticResource Ft.Brush.Primary}"/>
+        <Setter Property="Background" Value="#E6F7F4"/>
+        <Setter Property="BorderBrush" Value="#B2DFDB"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="14,8"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="MinWidth" Value="72"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="18" Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="#D1F2EC"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="#B2DFDB"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="Ft.Btn.Admin.PillDanger" TargetType="Button" BasedOn="{StaticResource Ft.Btn.Admin.PillTeal}">
+        <Setter Property="Foreground" Value="#DC2626"/>
+        <Setter Property="Background" Value="#FEF2F2"/>
+        <Setter Property="BorderBrush" Value="#FECACA"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="18" Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="#FEE2E2"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="#FECACA"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

@@ -1,0 +1,554 @@
+﻿<UserControl x:Class="FitnessTracker.AdminDashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="#F0F8F7"
+             FontFamily="Segoe UI">
+
+    <UserControl.Resources>
+        <DropShadowEffect x:Key="CardShadow"
+                          Color="#000000" Opacity="0.08"
+                          BlurRadius="20" ShadowDepth="4" Direction="270"/>
+
+        <!-- ─── Admin Summary Card ─────────────────────────── -->
+        <Style x:Key="AdminCard" TargetType="Border">
+            <Setter Property="Background"   Value="White"/>
+            <Setter Property="CornerRadius" Value="16"/>
+            <Setter Property="Padding"      Value="24,20"/>
+            <Setter Property="Effect"       Value="{StaticResource CardShadow}"/>
+        </Style>
+
+        <!-- ─── DataGrid Style ────────────────────────────– -->
+        <Style x:Key="ModernDataGrid" TargetType="DataGrid">
+            <Setter Property="Background"              Value="Transparent"/>
+            <Setter Property="BorderThickness"         Value="0"/>
+            <Setter Property="RowBackground"           Value="White"/>
+            <Setter Property="AlternatingRowBackground" Value="#F1F8F7"/>
+            <Setter Property="GridLinesVisibility"     Value="Horizontal"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="#E0F2F1"/>
+            <Setter Property="VerticalGridLinesBrush"  Value="Transparent"/>
+            <Setter Property="HeadersVisibility"       Value="Column"/>
+            <Setter Property="AutoGenerateColumns"     Value="False"/>
+            <Setter Property="CanUserAddRows"          Value="False"/>
+            <Setter Property="CanUserDeleteRows"       Value="False"/>
+            <Setter Property="CanUserReorderColumns"   Value="False"/>
+            <Setter Property="CanUserResizeRows"       Value="False"/>
+            <Setter Property="SelectionMode"           Value="Single"/>
+            <Setter Property="FontSize"                Value="13"/>
+            <Setter Property="FontFamily"              Value="Segoe UI"/>
+            <Setter Property="RowHeight"               Value="52"/>
+        </Style>
+
+        <!-- ─── DataGrid Column Header Style ─────────────── -->
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background"  Value="#F1F8F7"/>
+            <Setter Property="Foreground"  Value="#607D8B"/>
+            <Setter Property="FontWeight"  Value="SemiBold"/>
+            <Setter Property="FontSize"    Value="12"/>
+            <Setter Property="Padding"     Value="16,14"/>
+            <Setter Property="BorderThickness" Value="0,0,0,2"/>
+            <Setter Property="BorderBrush" Value="#E0F2F1"/>
+        </Style>
+
+        <!-- ─── DataGrid Cell Style ──────────────────────── -->
+        <Style TargetType="DataGridCell">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding"         Value="16,0"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#EBF8FF"/>
+                    <Setter Property="Foreground" Value="#1A202C"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- ─── Edit Button ──────────────────────────────── -->
+        <Style x:Key="EditBtn" TargetType="Button">
+            <Setter Property="Background"      Value="#E1F5FF"/>
+            <Setter Property="Foreground"      Value="#0099CC"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding"         Value="12,6"/>
+            <Setter Property="FontSize"        Value="12"/>
+            <Setter Property="FontWeight"      Value="SemiBold"/>
+            <Setter Property="Cursor"          Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="8"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#0099CC"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ─── Delete Button ────────────────────────────── -->
+        <Style x:Key="DeleteBtn" TargetType="Button">
+            <Setter Property="Background"      Value="#FFEBEE"/>
+            <Setter Property="Foreground"      Value="#E53935"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding"         Value="12,6"/>
+            <Setter Property="FontSize"        Value="12"/>
+            <Setter Property="FontWeight"      Value="SemiBold"/>
+            <Setter Property="Cursor"          Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="8"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#E53935"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="32,28,32,32">
+
+            <!-- ─── HEADER ───────────────────────────────────── -->
+            <Grid Margin="0,0,0,24">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Admin Dashboard 🛡"
+                               FontSize="26" FontWeight="Bold"
+                               Foreground="#1A202C"/>
+                    <TextBlock x:Name="AdminDateText"
+                               FontSize="13" Foreground="#718096"
+                               Margin="0,4,0,0"/>
+                </StackPanel>
+                <!-- Add User Button -->
+                <Button Grid.Column="1"
+                        Content="+ Add User"
+                        Foreground="White"
+                        FontSize="13" FontWeight="SemiBold"
+                        BorderThickness="0"
+                        Cursor="Hand"
+                        Padding="20,12">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="#00B4D8" CornerRadius="10"
+                                    Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
+
+            <!-- ─── TOP SUMMARY CARDS ─────────────────────── -->
+            <Grid Margin="0,0,0,24">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Users Card -->
+                <Border Grid.Column="0"
+                        Style="{StaticResource AdminCard}"
+                        Margin="0,0,12,0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="Total Users"
+                                       FontSize="13" Foreground="#718096"
+                                       FontWeight="SemiBold" Margin="0,0,0,8"/>
+                            <TextBlock Text="120"
+                                       FontSize="36" FontWeight="Bold"
+                                       Foreground="#00B4D8"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                                <TextBlock Text="▲ 12%" FontSize="12"
+                                           Foreground="#20C997" FontWeight="SemiBold"/>
+                                <TextBlock Text=" vs last month" FontSize="12"
+                                           Foreground="#A0AEC0"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <Border Grid.Column="1"
+                                Width="56" Height="56"
+                                CornerRadius="16"
+                                Background="#EBF8FF"
+                                VerticalAlignment="Center">
+                            <TextBlock Text="👥" FontSize="26"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <!-- Meals Card -->
+                <Border Grid.Column="1"
+                        Style="{StaticResource AdminCard}"
+                        Margin="0,0,12,0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="Total Meals"
+                                       FontSize="13" Foreground="#718096"
+                                       FontWeight="SemiBold" Margin="0,0,0,8"/>
+                            <TextBlock Text="340"
+                                       FontSize="36" FontWeight="Bold"
+                                       Foreground="#FF7043"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                                <TextBlock Text="▲ 8%" FontSize="12"
+                                           Foreground="#20C997" FontWeight="SemiBold"/>
+                                <TextBlock Text=" vs last month" FontSize="12"
+                                           Foreground="#A0AEC0"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <Border Grid.Column="1"
+                                Width="56" Height="56"
+                                CornerRadius="16"
+                                Background="#FFF3E0"
+                                VerticalAlignment="Center">
+                            <TextBlock Text="🍽" FontSize="26"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <!-- Exercises Card -->
+                <Border Grid.Column="2"
+                        Style="{StaticResource AdminCard}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="Total Exercises"
+                                       FontSize="13" Foreground="#718096"
+                                       FontWeight="SemiBold" Margin="0,0,0,8"/>
+                            <TextBlock Text="220"
+                                       FontSize="36" FontWeight="Bold"
+                                       Foreground="#20C997"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                                <TextBlock Text="▲ 18%" FontSize="12"
+                                           Foreground="#20C997" FontWeight="SemiBold"/>
+                                <TextBlock Text=" vs last month" FontSize="12"
+                                           Foreground="#A0AEC0"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <Border Grid.Column="1"
+                                Width="56" Height="56"
+                                CornerRadius="16"
+                                Background="#E8F5E9"
+                                VerticalAlignment="Center">
+                            <TextBlock Text="🏋" FontSize="26"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
+                        </Border>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <!-- ─── BOTTOM SECTION: Bar Chart + User Table ── -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="340"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Monthly Activity Bar Chart -->
+                <Border Grid.Column="0"
+                        Style="{StaticResource AdminCard}"
+                        Margin="0,0,16,0">
+                    <StackPanel>
+                        <TextBlock Text="Monthly Activity"
+                                   FontSize="15" FontWeight="Bold"
+                                   Foreground="#1A202C" Margin="0,0,0,20"/>
+
+                        <!-- Custom bar chart drawn with Rectangles -->
+                        <Grid Height="180" Margin="0,0,0,12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Bar: Jan -->
+                            <StackPanel Grid.Column="0"
+                                        VerticalAlignment="Bottom"
+                                        HorizontalAlignment="Center">
+                                <Border Width="28" Height="90"
+                                        CornerRadius="6,6,0,0"
+                                        Background="#00B4D8"/>
+                            </StackPanel>
+
+                            <!-- Bar: Feb -->
+                            <StackPanel Grid.Column="1"
+                                        VerticalAlignment="Bottom"
+                                        HorizontalAlignment="Center">
+                                <Border Width="28" Height="120"
+                                        CornerRadius="6,6,0,0"
+                                        Background="#00B4D8"/>
+                            </StackPanel>
+
+                            <!-- Bar: Mar -->
+                            <StackPanel Grid.Column="2"
+                                        VerticalAlignment="Bottom"
+                                        HorizontalAlignment="Center">
+                                <Border Width="28" Height="70"
+                                        CornerRadius="6,6,0,0"
+                                        Background="#00B4D8"/>
+                            </StackPanel>
+
+                            <!-- Bar: Apr (highlighted) -->
+                            <StackPanel Grid.Column="3"
+                                        VerticalAlignment="Bottom"
+                                        HorizontalAlignment="Center">
+                                <Border Width="28" Height="160"
+                                        CornerRadius="6,6,0,0"
+                                        Background="#20C997"/>
+                            </StackPanel>
+
+                            <!-- Bar: May -->
+                            <StackPanel Grid.Column="4"
+                                        VerticalAlignment="Bottom"
+                                        HorizontalAlignment="Center">
+                                <Border Width="28" Height="110"
+                                        CornerRadius="6,6,0,0"
+                                        Background="#00B4D8"/>
+                            </StackPanel>
+
+                            <!-- Bar: Jun -->
+                            <StackPanel Grid.Column="5"
+                                        VerticalAlignment="Bottom"
+                                        HorizontalAlignment="Center">
+                                <Border Width="28" Height="140"
+                                        CornerRadius="6,6,0,0"
+                                        Background="#00B4D8"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Axis labels -->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Jan" FontSize="11"
+                                       Foreground="#A0AEC0" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Text="Feb" FontSize="11"
+                                       Foreground="#A0AEC0" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="2" Text="Mar" FontSize="11"
+                                       Foreground="#A0AEC0" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="3" Text="Apr" FontSize="11"
+                                       Foreground="#20C997" FontWeight="Bold"
+                                       HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="4" Text="May" FontSize="11"
+                                       Foreground="#A0AEC0" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="5" Text="Jun" FontSize="11"
+                                       Foreground="#A0AEC0" HorizontalAlignment="Center"/>
+                        </Grid>
+
+                        <!-- Legend -->
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="0,16,0,0">
+                            <Border Width="12" Height="12"
+                                    CornerRadius="3"
+                                    Background="#00B4D8"
+                                    VerticalAlignment="Center"
+                                    Margin="0,0,6,0"/>
+                            <TextBlock Text="Activity" FontSize="12"
+                                       Foreground="#718096" Margin="0,0,16,0"/>
+                            <Border Width="12" Height="12"
+                                    CornerRadius="3"
+                                    Background="#20C997"
+                                    VerticalAlignment="Center"
+                                    Margin="0,0,6,0"/>
+                            <TextBlock Text="Peak Month" FontSize="12"
+                                       Foreground="#718096"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Manage Users Table -->
+                <Border Grid.Column="1"
+                        Style="{StaticResource AdminCard}">
+                    <StackPanel>
+                        <!-- Table header -->
+                        <Grid Margin="0,0,0,16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"
+                                       Text="Manage Users"
+                                       FontSize="15" FontWeight="Bold"
+                                       Foreground="#1A202C"/>
+                            <!-- Search box -->
+                            <Border Grid.Column="1"
+                                    CornerRadius="8"
+                                    Background="#F7FAFC"
+                                    Padding="10,8"
+                                    BorderBrush="#E2E8F0"
+                                    BorderThickness="1">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="🔍" FontSize="13"
+                                               Foreground="#A0AEC0"
+                                               VerticalAlignment="Center"
+                                               Margin="0,0,6,0"/>
+                                    <TextBox x:Name="SearchBox"
+                                             Width="140"
+                                             BorderThickness="0"
+                                             Background="Transparent"
+                                             FontSize="12"
+                                             Foreground="#4A5568"
+                                             VerticalContentAlignment="Center">
+                                        <TextBox.Resources>
+                                            <Style TargetType="Border">
+                                                <Setter Property="CornerRadius" Value="8"/>
+                                            </Style>
+                                        </TextBox.Resources>
+                                    </TextBox>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+
+                        <!-- DataGrid -->
+                        <DataGrid x:Name="UsersGrid"
+                                  Style="{StaticResource ModernDataGrid}"
+                                  MaxHeight="300">
+                            <DataGrid.Columns>
+                                <!-- ID -->
+                                <DataGridTextColumn Header="ID"
+                                                    Binding="{Binding Id}"
+                                                    Width="50"
+                                                    IsReadOnly="True"/>
+
+                                <!-- Avatar + Username -->
+                                <DataGridTemplateColumn Header="Username" Width="140" IsReadOnly="True">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal"
+                                                        VerticalAlignment="Center"
+                                                        Margin="4,0">
+                                                <Border Width="30" Height="30"
+                                                        CornerRadius="15"
+                                                        Background="#EBF8FF"
+                                                        Margin="0,0,8,0">
+                                                    <TextBlock Text="{Binding Initials}"
+                                                               FontSize="11"
+                                                               FontWeight="Bold"
+                                                               Foreground="#00B4D8"
+                                                               HorizontalAlignment="Center"
+                                                               VerticalAlignment="Center"/>
+                                                </Border>
+                                                <TextBlock Text="{Binding Username}"
+                                                           FontWeight="SemiBold"
+                                                           Foreground="#1A202C"
+                                                           VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <!-- Email -->
+                                <DataGridTextColumn Header="Email"
+                                                    Binding="{Binding Email}"
+                                                    Width="*"
+                                                    IsReadOnly="True">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Foreground" Value="#718096"/>
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+
+                                <!-- Status Badge -->
+                                <DataGridTemplateColumn Header="Status" Width="90" IsReadOnly="True">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Border CornerRadius="6"
+                                                    Padding="8,4"
+                                                    HorizontalAlignment="Center"
+                                                    Background="{Binding StatusBackground}">
+                                                <TextBlock Text="{Binding Status}"
+                                                           FontSize="11"
+                                                           FontWeight="SemiBold"
+                                                           Foreground="{Binding StatusForeground}"
+                                                           HorizontalAlignment="Center"/>
+                                            </Border>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <!-- Actions -->
+                                <DataGridTemplateColumn Header="Actions" Width="130" IsReadOnly="True">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal"
+                                                        VerticalAlignment="Center"
+                                                        Margin="4,0">
+                                                <Button Content="Edit"
+                                                        Style="{StaticResource EditBtn}"
+                                                        Margin="0,0,6,0"
+                                                        Click="EditUser_Click"
+                                                        Tag="{Binding Id}"/>
+                                                <Button Content="Delete"
+                                                        Style="{StaticResource DeleteBtn}"
+                                                        Click="DeleteUser_Click"
+                                                        Tag="{Binding Id}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <!-- Pagination row -->
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Right"
+                                    Margin="0,12,0,0">
+                            <TextBlock Text="Showing 1–4 of 4 users"
+                                       FontSize="12"
+                                       Foreground="#A0AEC0"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,12,0"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

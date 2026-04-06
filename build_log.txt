@@ -1,0 +1,9 @@
+C:\Users\abdalla\Desktop\Project1\LoginView.xaml.cs(100,14): error CS1513: } expected [C:\Users\abdalla\Desktop\Project1\FitnessTracker_5fcdh0jy_wpftmp.csproj]
+
+Build FAILED.
+
+C:\Users\abdalla\Desktop\Project1\LoginView.xaml.cs(100,14): error CS1513: } expected [C:\Users\abdalla\Desktop\Project1\FitnessTracker_5fcdh0jy_wpftmp.csproj]
+    0 Warning(s)
+    1 Error(s)
+
+Time Elapsed 00:00:09.61

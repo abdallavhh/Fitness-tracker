@@ -1,0 +1,198 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes">
+
+    <!-- ═══ 1. Color palette (pixel reference) ═══ -->
+    <Color x:Key="Fds.Color.AccentTeal">#FF00A693</Color>
+    <Color x:Key="Fds.Color.TextPrimary">#FF212121</Color>
+    <Color x:Key="Fds.Color.TextSecondary">#FF616161</Color>
+    <Color x:Key="Fds.Color.PageBg">#FFF9FAFB</Color>
+    <Color x:Key="Fds.Color.CardBg">#FFFFFFFF</Color>
+    <Color x:Key="Fds.Color.SidebarBg">#FF101112</Color>
+    <Color x:Key="Fds.Color.StatusBloodPressure">#FFF44336</Color>
+    <Color x:Key="Fds.Color.StatusWaterSugar">#FF00A693</Color>
+
+    <SolidColorBrush x:Key="Fds.Brush.AccentTeal" Color="{StaticResource Fds.Color.AccentTeal}"/>
+    <SolidColorBrush x:Key="Fds.Brush.TextPrimary" Color="{StaticResource Fds.Color.TextPrimary}"/>
+    <SolidColorBrush x:Key="Fds.Brush.TextSecondary" Color="{StaticResource Fds.Color.TextSecondary}"/>
+    <SolidColorBrush x:Key="Fds.Brush.Page" Color="{StaticResource Fds.Color.PageBg}"/>
+    <SolidColorBrush x:Key="Fds.Brush.Card" Color="{StaticResource Fds.Color.CardBg}"/>
+    <SolidColorBrush x:Key="Fds.Brush.SidebarBg" Color="{StaticResource Fds.Color.SidebarBg}"/>
+    <SolidColorBrush x:Key="Fds.Brush.SidebarHover" Color="#FF1A1B1D"/>
+    <SolidColorBrush x:Key="Fds.Brush.SidebarText" Color="#FFB8B9BC"/>
+    <SolidColorBrush x:Key="Fds.Brush.SidebarIconInactive" Color="#FFB8B9BC"/>
+    <SolidColorBrush x:Key="Fds.Brush.StatusBloodPressure" Color="{StaticResource Fds.Color.StatusBloodPressure}"/>
+    <SolidColorBrush x:Key="Fds.Brush.StatusWaterSugar" Color="{StaticResource Fds.Color.StatusWaterSugar}"/>
+
+    <DropShadowEffect x:Key="Fds.Shadow.Card"
+                      Color="Black" Opacity="0.08" BlurRadius="20" ShadowDepth="4" Direction="270"/>
+
+    <!-- ═══ 2. Typography (Inter / Roboto / Segoe fallbacks) ═══ -->
+    <FontFamily x:Key="Fds.FontFamily.Primary">Inter, Roboto, Segoe UI Variable Text, Segoe UI, sans-serif</FontFamily>
+
+    <Style x:Key="Fds.Text.PageHeading" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Fds.FontFamily.Primary}"/>
+        <Setter Property="FontSize" Value="28"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="{StaticResource Fds.Brush.TextPrimary}"/>
+    </Style>
+
+    <Style x:Key="Fds.Text.CardMainNumber" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Fds.FontFamily.Primary}"/>
+        <Setter Property="FontSize" Value="32"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="{StaticResource Fds.Brush.TextPrimary}"/>
+    </Style>
+
+    <Style x:Key="Fds.Text.CardMainNumberAccent" TargetType="TextBlock" BasedOn="{StaticResource Fds.Text.CardMainNumber}">
+        <Setter Property="Foreground" Value="{StaticResource Fds.Brush.AccentTeal}"/>
+    </Style>
+
+    <Style x:Key="Fds.Text.CardUnit" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Fds.FontFamily.Primary}"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="Foreground" Value="{StaticResource Fds.Brush.TextSecondary}"/>
+    </Style>
+
+    <Style x:Key="Fds.Text.LabelSubtitle" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Fds.FontFamily.Primary}"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="Foreground" Value="{StaticResource Fds.Brush.TextSecondary}"/>
+    </Style>
+
+    <Style x:Key="Fds.Text.SidebarNav" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Fds.FontFamily.Primary}"/>
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+
+    <!-- ═══ 3. MaterialDesign PackIcon (sidebar 24×24, cards 32×32) ═══ -->
+    <Style x:Key="Fds.Icon.Sidebar" TargetType="md:PackIcon">
+        <Setter Property="Width" Value="24"/>
+        <Setter Property="Height" Value="24"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0,0,12,0"/>
+    </Style>
+
+    <Style x:Key="Fds.Icon.Card" TargetType="md:PackIcon">
+        <Setter Property="Width" Value="32"/>
+        <Setter Property="Height" Value="32"/>
+    </Style>
+
+    <Style x:Key="Fds.Icon.DashboardOutline" TargetType="md:PackIcon" BasedOn="{StaticResource Fds.Icon.Card}">
+        <Setter Property="Kind" Value="ViewDashboardOutline"/>
+        <Setter Property="Foreground" Value="{StaticResource Fds.Brush.AccentTeal}"/>
+    </Style>
+    <Style x:Key="Fds.Icon.MealsForkKnife" TargetType="md:PackIcon" BasedOn="{StaticResource Fds.Icon.Card}">
+        <Setter Property="Kind" Value="SilverwareForkKnife"/>
+        <Setter Property="Foreground" Value="{StaticResource Fds.Brush.AccentTeal}"/>
+    </Style>
+    <Style x:Key="Fds.Icon.ExercisesDumbbell" TargetType="md:PackIcon" BasedOn="{StaticResource Fds.Icon.Card}">
+        <Setter Property="Kind" Value="Dumbbell"/>
+        <Setter Property="Foreground" Value="{StaticResource Fds.Brush.AccentTeal}"/>
+    </Style>
+    <Style x:Key="Fds.Icon.HealthHeartOutline" TargetType="md:PackIcon" BasedOn="{StaticResource Fds.Icon.Card}">
+        <Setter Property="Kind" Value="HeartOutline"/>
+        <Setter Property="Foreground" Value="{StaticResource Fds.Brush.AccentTeal}"/>
+    </Style>
+    <Style x:Key="Fds.Icon.GoalsTarget" TargetType="md:PackIcon" BasedOn="{StaticResource Fds.Icon.Card}">
+        <Setter Property="Kind" Value="Target"/>
+        <Setter Property="Foreground" Value="{StaticResource Fds.Brush.AccentTeal}"/>
+    </Style>
+    <Style x:Key="Fds.Icon.CaloriesFire" TargetType="md:PackIcon" BasedOn="{StaticResource Fds.Icon.Card}">
+        <Setter Property="Kind" Value="Fire"/>
+        <Setter Property="Foreground" Value="{StaticResource Fds.Brush.AccentTeal}"/>
+    </Style>
+    <Style x:Key="Fds.Icon.WaterCup" TargetType="md:PackIcon" BasedOn="{StaticResource Fds.Icon.Card}">
+        <Setter Property="Kind" Value="CupWater"/>
+        <Setter Property="Foreground" Value="{StaticResource Fds.Brush.StatusWaterSugar}"/>
+    </Style>
+
+    <!-- ═══ 4. Layout tokens ═══ -->
+    <Thickness x:Key="Fds.Spacing.ContentMargin">40,30,40,30</Thickness>
+    <Thickness x:Key="Fds.Spacing.SectionAfterTitle">0,0,0,25</Thickness>
+
+    <!-- Stat cards (UniformGrid / WrapPanel) -->
+    <Style x:Key="Fds.Card.Stat" TargetType="Border">
+        <Setter Property="MinWidth" Value="180"/>
+        <Setter Property="Height" Value="140"/>
+        <Setter Property="CornerRadius" Value="12"/>
+        <Setter Property="Padding" Value="20"/>
+        <Setter Property="Background" Value="{StaticResource Fds.Brush.Card}"/>
+        <Setter Property="Effect" Value="{StaticResource Fds.Shadow.Card}"/>
+    </Style>
+
+    <!-- Chart container -->
+    <Style x:Key="Fds.Card.Chart" TargetType="Border">
+        <Setter Property="MinWidth" Value="500"/>
+        <Setter Property="Height" Value="350"/>
+        <Setter Property="Padding" Value="25"/>
+        <Setter Property="CornerRadius" Value="12"/>
+        <Setter Property="Background" Value="{StaticResource Fds.Brush.Card}"/>
+        <Setter Property="Effect" Value="{StaticResource Fds.Shadow.Card}"/>
+    </Style>
+
+    <!-- Primary / chrome buttons -->
+    <Style x:Key="Fds.Button.Chrome" TargetType="Button">
+        <Setter Property="FontFamily" Value="{StaticResource Fds.FontFamily.Primary}"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding" Value="15,10"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Bd"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="6"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="Opacity" Value="0.92"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Bd" Property="Opacity" Value="0.85"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Bd" Property="Opacity" Value="0.5"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- DataGrid: row height 50, vertical center (apply via Style="{StaticResource Fds.DataGrid.Row}" on grid or merge) -->
+    <Style x:Key="Fds.DataGrid.Row" TargetType="DataGridRow">
+        <Setter Property="MinHeight" Value="50"/>
+        <Setter Property="Height" Value="50"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+    <Style x:Key="Fds.DataGrid.Cell" TargetType="DataGridCell">
+        <Setter Property="Padding" Value="12,0"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="BorderThickness" Value="0"/>
+    </Style>
+
+    <!-- Circular progress ring ~100px: apply both ellipses in a 100×100 Grid; teal stroke #00A693, track #E8F2F0 -->
+    <Style x:Key="Fds.ProgressRing.Track" TargetType="Ellipse">
+        <Setter Property="Width" Value="100"/>
+        <Setter Property="Height" Value="100"/>
+        <Setter Property="Stroke" Value="#FFE8F2F0"/>
+        <Setter Property="StrokeThickness" Value="8"/>
+        <Setter Property="Fill" Value="Transparent"/>
+    </Style>
+    <Style x:Key="Fds.ProgressRing.Accent" TargetType="Ellipse">
+        <Setter Property="Width" Value="100"/>
+        <Setter Property="Height" Value="100"/>
+        <Setter Property="Stroke" Value="{StaticResource Fds.Brush.AccentTeal}"/>
+        <Setter Property="StrokeThickness" Value="8"/>
+        <Setter Property="Fill" Value="Transparent"/>
+        <Setter Property="StrokeDashCap" Value="Round"/>
+    </Style>
+
+</ResourceDictionary>
