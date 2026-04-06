@@ -114,6 +114,7 @@ C:\Users\abdalla\Desktop\Fitness-tracker\obj\Debug\net8.0-windows\Themes\DesignT
 C:\Users\abdalla\Desktop\Fitness-tracker\obj\Debug\net8.0-windows\Themes\FinalDesignSystem.baml
 C:\Users\abdalla\Desktop\Fitness-tracker\obj\Debug\net8.0-windows\Views\AdminDashboardView.baml
 C:\Users\abdalla\Desktop\Fitness-tracker\obj\Debug\net8.0-windows\Views\AdminPlaceholderView.baml
+C:\Users\abdalla\Desktop\Fitness-tracker\obj\Debug\net8.0-windows\Views\DashboardHomeView.baml
 C:\Users\abdalla\Desktop\Fitness-tracker\obj\Debug\net8.0-windows\Views\ManageUsersView.baml
 C:\Users\abdalla\Desktop\Fitness-tracker\obj\Debug\net8.0-windows\Views\UserProfileView.baml
 C:\Users\abdalla\Desktop\Fitness-tracker\obj\Debug\net8.0-windows\MainWindow.g.cs
@@ -132,7 +133,6 @@ C:\Users\abdalla\Desktop\Fitness-tracker\obj\Debug\net8.0-windows\FitnessTracker
 C:\Users\abdalla\Desktop\Fitness-tracker\obj\Debug\net8.0-windows\GeneratedInternalTypeHelper.g.cs
 C:\Users\abdalla\Desktop\Fitness-tracker\obj\Debug\net8.0-windows\FitnessTracker_MarkupCompile.cache
 C:\Users\abdalla\Desktop\Fitness-tracker\obj\Debug\net8.0-windows\FitnessTracker_MarkupCompile.lref
-C:\Users\abdalla\Desktop\Fitness-tracker\obj\Debug\net8.0-windows\Views\MealsView.baml
 C:\Users\abdalla\Desktop\Fitness-tracker\obj\Debug\net8.0-windows\FitnessTracker.g.resources
 C:\Users\abdalla\Desktop\Fitness-tracker\obj\Debug\net8.0-windows\refint\FitnessTracker.dll
 C:\Users\abdalla\Desktop\Fitness-tracker\obj\Debug\net8.0-windows\FitnessTracker.pdb
@@ -165,11 +165,11 @@ C:\Users\abdalla\Desktop\Fitness-tracker\bin\Debug\net8.0-windows\runtimes\win-x
 C:\Users\abdalla\Desktop\Fitness-tracker\obj\Debug\net8.0-windows\App.baml
 C:\Users\abdalla\Desktop\Fitness-tracker\obj\Debug\net8.0-windows\MainWindow.baml
 C:\Users\abdalla\Desktop\Fitness-tracker\obj\Debug\net8.0-windows\Themes\ViewDataTemplates.baml
-C:\Users\abdalla\Desktop\Fitness-tracker\obj\Debug\net8.0-windows\Views\DashboardHomeView.baml
 C:\Users\abdalla\Desktop\Fitness-tracker\obj\Debug\net8.0-windows\Views\ExerciseLogView.baml
 C:\Users\abdalla\Desktop\Fitness-tracker\obj\Debug\net8.0-windows\Views\GoalsView.baml
 C:\Users\abdalla\Desktop\Fitness-tracker\obj\Debug\net8.0-windows\Views\HealthMetricsView.baml
 C:\Users\abdalla\Desktop\Fitness-tracker\obj\Debug\net8.0-windows\Views\LoginPage.baml
+C:\Users\abdalla\Desktop\Fitness-tracker\obj\Debug\net8.0-windows\Views\MealsView.baml
 C:\Users\abdalla\Desktop\Fitness-tracker\obj\Debug\net8.0-windows\FitnessTracker.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\abdalla\Desktop\Fitness-tracker\obj\Debug\net8.0-windows\FitnessTracker.AssemblyInfoInputs.cache
 C:\Users\abdalla\Desktop\Fitness-tracker\obj\Debug\net8.0-windows\FitnessTracker.AssemblyInfo.cs

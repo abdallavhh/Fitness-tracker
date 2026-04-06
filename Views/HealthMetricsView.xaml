@@ -44,27 +44,31 @@
             <ItemsControl ItemsSource="{Binding Metrics}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel Orientation="Horizontal"/>
+                        <StackPanel Orientation="Vertical"/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate DataType="{x:Type vm:HealthMetricItemVm}">
-                        <Border MinWidth="200" MaxWidth="360" Margin="0,0,12,12" CornerRadius="8" Padding="16"
+                        <Border HorizontalAlignment="Stretch" Margin="0,0,0,12" CornerRadius="8" Padding="16"
                                 Background="{Binding TileBackgroundHex, Converter={StaticResource HexToBrush}}"
                                 Effect="{StaticResource SoftShadow.Effect.ListItem}">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
                                 <materialDesign:PackIcon Grid.Column="0" Kind="{Binding IconKind}" Width="32" Height="32"
-                                                         VerticalAlignment="Top" Margin="0,0,14,0"
+                                                         VerticalAlignment="Center" Margin="0,0,14,0"
                                                          Foreground="{Binding IconColorHex, Converter={StaticResource HexToBrush}}"/>
-                                <StackPanel Grid.Column="1">
-                                    <TextBlock Text="{Binding Name}" FontSize="13" FontWeight="SemiBold" Foreground="{StaticResource Ft.Brush.Label}"/>
-                                    <TextBlock Text="{Binding Value}" FontSize="20" FontWeight="Bold" Margin="0,8,0,0"
-                                               Foreground="{Binding ValueColorHex, Converter={StaticResource HexToBrush}}"/>
-                                </StackPanel>
+                                
+                                <TextBlock Grid.Column="1" Text="{Binding Name}" FontSize="15" FontWeight="SemiBold" 
+                                           HorizontalAlignment="Left" VerticalAlignment="Center" 
+                                           Foreground="{StaticResource Ft.Brush.Heading}"/>
+                                
+                                <TextBlock Grid.Column="2" Text="{Binding Value}" FontSize="16" FontWeight="Bold" 
+                                           HorizontalAlignment="Right" VerticalAlignment="Center"
+                                           Foreground="{Binding ValueColorHex, Converter={StaticResource HexToBrush}}"/>
                             </Grid>
                         </Border>
                     </DataTemplate>

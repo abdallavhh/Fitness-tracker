@@ -1,0 +1,169 @@
+﻿<Window x:Class="FitnessTracker.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:FitnessTracker.ViewModels"
+        Title="Fitness Tracker"
+        Height="820" Width="1320"
+        MinHeight="480" MinWidth="360"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource Ft.Brush.Page}"
+        FontFamily="{StaticResource Ft.Font.App}"
+        UseLayoutRounding="True"
+        SnapsToDevicePixels="True"
+        SizeChanged="MainWindow_OnSizeChanged">
+
+    <Window.Resources>
+        <Style x:Key="SidebarNavButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{StaticResource Ft.Brush.SidebarText}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="MinHeight" Value="46"/>
+            <Setter Property="Margin" Value="10,2,10,2"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Padding" Value="15,10"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bd" Background="{TemplateBinding Background}" CornerRadius="6" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="{StaticResource Ft.Brush.SidebarHover}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <DataTrigger Value="True">
+                    <DataTrigger.Binding>
+                        <MultiBinding Converter="{StaticResource NavKeyActive}">
+                            <Binding Path="DataContext.ActiveNavKey" RelativeSource="{RelativeSource AncestorType=Window}"/>
+                            <Binding Path="Tag" RelativeSource="{RelativeSource Self}"/>
+                        </MultiBinding>
+                    </DataTrigger.Binding>
+                    <Setter Property="Background" Value="{StaticResource Ft.Brush.Primary}"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="SidebarLogoutButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#FCA5A5"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="MinHeight" Value="46"/>
+            <Setter Property="Margin" Value="10,2,10,2"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Padding" Value="15,10"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bd" Background="{TemplateBinding Background}" CornerRadius="6" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="{StaticResource Ft.Brush.SidebarHover}"/>
+                                <Setter Property="Foreground" Value="#FECACA"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+                        </Grid.ColumnDefinitions>
+
+                        <Border x:Name="SidebarPanel" Grid.Column="0"
+                                Background="{StaticResource Fds.Brush.SidebarBg}" Style="{StaticResource SoftShadowSidebar}">
+                            <DockPanel LastChildFill="True">
+                                <StackPanel DockPanel.Dock="Top" Margin="20,28,20,20" Orientation="Horizontal">
+                                    <Border Width="44" Height="44" CornerRadius="8" Background="#26FFFFFF" VerticalAlignment="Center" Margin="0,0,12,0">
+                                        <materialDesign:PackIcon Kind="HeartPulse" Width="26" Height="26" Foreground="White"
+                                                                 HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="FITNESS" Foreground="White" FontSize="15" FontWeight="Bold"/>
+                                        <TextBlock Text="TRACKER" Foreground="{StaticResource Fds.Brush.AccentTeal}" FontSize="11" FontWeight="Bold"/>
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <Button DockPanel.Dock="Bottom" Style="{StaticResource SidebarLogoutButton}" Margin="10,8,10,24"
+                                        Command="{Binding LogoutCommand}"
+                                        Foreground="#FCA5A5">
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="Logout" Width="24" Height="24" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                                        <TextBlock Text="Logout" VerticalAlignment="Center" Style="{StaticResource Fds.Text.SidebarNav}"/>
+                                    </StackPanel>
+                                </Button>
+
+                                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                    <StackPanel Margin="0,0,0,25">
+                                        <Border Visibility="{Binding ShowAdminShell, Converter={StaticResource BoolToVis}}"
+                                                Background="{StaticResource Fds.Brush.SidebarHover}" CornerRadius="6" Padding="10,8" Margin="16,0,16,14">
+                                            <TextBlock Text="ADMIN" Foreground="{StaticResource Fds.Brush.AccentTeal}" FontWeight="Bold" FontSize="11" HorizontalAlignment="Center"/>
+                                        </Border>
+
+                                        <ItemsControl Visibility="{Binding ShowUserShell, Converter={StaticResource BoolToVis}}" ItemsSource="{Binding UserNavItems}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate DataType="{x:Type vm:SidebarNavItemVm}">
+                                                    <Button Style="{StaticResource SidebarNavButton}"
+                                                            Command="{Binding DataContext.NavigateCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                            CommandParameter="{Binding Key}"
+                                                            Tag="{Binding Key}">
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <materialDesign:PackIcon Kind="{Binding IconKind}" Style="{StaticResource Fds.Icon.Sidebar}"/>
+                                                            <TextBlock Text="{Binding Title}" Style="{StaticResource Fds.Text.SidebarNav}"/>
+                                                        </StackPanel>
+                                                    </Button>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+
+                                        <ItemsControl Visibility="{Binding ShowAdminShell, Converter={StaticResource BoolToVis}}" ItemsSource="{Binding AdminNavItems}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate DataType="{x:Type vm:SidebarNavItemVm}">
+                                                    <Button Style="{StaticResource SidebarNavButton}"
+                                                            Command="{Binding DataContext.NavigateCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                            CommandParameter="{Binding Key}"
+                                                            Tag="{Binding Key}">
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <materialDesign:PackIcon Kind="{Binding IconKind}" Style="{StaticResource Fds.Icon.Sidebar}"/>
+                                                            <TextBlock Text="{Binding Title}" Style="{StaticResource Fds.Text.SidebarNav}"/>
+                                                        </StackPanel>
+                                                    </Button>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </DockPanel>
+                        </Border>
+
+                        <Grid Grid.Column="1" x:Name="ContentHost">
+                            <Rectangle x:Name="NavScrim" Fill="#66000000" Visibility="Collapsed" Panel.ZIndex="2"
+                                       MouseLeftButtonDown="NavScrim_OnMouseDown"/>
+                            <ScrollViewer Panel.ZIndex="1"
+                                          VerticalScrollBarVisibility="Auto"
+                                          HorizontalScrollBarVisibility="Disabled">
+                                <ContentControl x:Name="MainContentArea"
+                                                Content="{Binding CurrentView}"
+                                                Margin="0"
+                                                Padding="0"
+                                                HorizontalAlignment="Stretch"
+                                                VerticalAlignment="Stretch"/>
+                            </ScrollViewer>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Grid>
+
+            <!-- Login (outside shell) -->
+            <ContentControl Grid.Row="1" Content="{Binding Login}" Visibility="{Binding IsLoggedIn, Converter={StaticResource InverseBoolToVis}}"/>
+        </Grid>
+    </Border>
+</Window>

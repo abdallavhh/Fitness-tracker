@@ -24,10 +24,26 @@ public static class AppSession
         }
     }
 
+    private static string? _profileImagePath = null;
+    public static string? ProfileImagePath
+    {
+        get => _profileImagePath;
+        set
+        {
+            if (_profileImagePath == value)
+                return;
+            _profileImagePath = value;
+            ProfileImageChanged?.Invoke(null, EventArgs.Empty);
+        }
+    }
+
     public static bool IsAdmin { get; set; }
 
     /// <summary>Raised when <see cref="DisplayName"/> changes (e.g. profile save).</summary>
     public static event EventHandler? DisplayNameChanged;
+    
+    /// <summary>Raised when <see cref="ProfileImagePath"/> changes.</summary>
+    public static event EventHandler? ProfileImageChanged;
 
     public static void Clear()
     {

@@ -16,6 +16,7 @@ public sealed class DashboardHomeViewModel : ViewModelBase
     {
         _shell = shell;
         AppSession.DisplayNameChanged += (_, _) => OnPropertyChanged(nameof(Greeting));
+        AppSession.ProfileImageChanged += (_, _) => OnPropertyChanged(nameof(ProfileImagePath));
         _dateDisplay = DateTime.Now.ToString("dddd, MMMM d, yyyy", CultureInfo.CurrentCulture);
 
         var d = SampleDataStore.Dashboard;
@@ -43,6 +44,7 @@ public sealed class DashboardHomeViewModel : ViewModelBase
     }
 
     public string Greeting => $"Hello, {AppSession.DisplayName} 👋";
+    public string? ProfileImagePath => AppSession.ProfileImagePath;
     public string DateDisplay => _dateDisplay;
 
     /// <summary>0..1 for circular progress arc.</summary>

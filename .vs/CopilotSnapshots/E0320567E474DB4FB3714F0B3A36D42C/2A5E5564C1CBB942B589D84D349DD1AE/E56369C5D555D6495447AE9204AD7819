@@ -1,0 +1,26 @@
+﻿using System.Windows;
+using FitnessTracker.ViewModels;
+
+namespace FitnessTracker;
+
+public partial class MainWindow : Window
+{
+    private MainWindowViewModel? _vm;
+
+    public MainWindow()
+    {
+        InitializeComponent();
+        _vm = new MainWindowViewModel();
+        DataContext = _vm;
+    }
+
+    private void MainWindow_OnSizeChanged(object sender, SizeChangedEventArgs e)
+    {
+        // Responsive layout handling can be added here if needed
+    }
+
+    private void NavScrim_OnMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    {
+        e.Handled = true;
+    }
+}

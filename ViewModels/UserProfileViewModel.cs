@@ -1,5 +1,7 @@
 using System.Globalization;
 using System.Windows;
+using Microsoft.Win32;
+using System.Windows.Media.Imaging;
 using FitnessTracker.Data;
 
 namespace FitnessTracker.ViewModels;
@@ -25,6 +27,9 @@ public sealed class UserProfileViewModel : ViewModelBase
         GoBackCommand = new RelayCommand(_ => _shell.NavigateTo("Dashboard"));
         EditCommand = new RelayCommand(_ => IsEditMode = true, _ => !IsEditMode);
         SaveCommand = new RelayCommand(_ => SaveProfile(), _ => IsEditMode);
+        UploadImageCommand = new RelayCommand(_ => UploadImage());
+        
+        AppSession.ProfileImageChanged += (_, _) => OnPropertyChanged(nameof(ProfileImagePath));
     }
 
     public bool IsEditMode
@@ -43,6 +48,11 @@ public sealed class UserProfileViewModel : ViewModelBase
     {
         get => _username;
         set => SetProperty(ref _username, value);
+    }
+
+    public string? ProfileImagePath
+    {
+        get => AppSession.ProfileImagePath;
     }
 
     public string Gender
@@ -90,6 +100,21 @@ public sealed class UserProfileViewModel : ViewModelBase
     public RelayCommand GoBackCommand { get; }
     public RelayCommand EditCommand { get; }
     public RelayCommand SaveCommand { get; }
+    public RelayCommand UploadImageCommand { get; }
+
+    private void UploadImage()
+    {
+        var openFileDialog = new OpenFileDialog
+        {
+            Title = "Select Profile Picture",
+            Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp|All Files|*.*"
+        };
+
+        if (openFileDialog.ShowDialog() == true)
+        {
+            AppSession.ProfileImagePath = openFileDialog.FileName;
+        }
+    }
 
     private void LoadFromStore()
     {

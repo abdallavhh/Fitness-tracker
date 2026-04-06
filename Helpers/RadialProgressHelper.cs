@@ -1,3 +1,4 @@
+using System;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -7,9 +8,9 @@ namespace FitnessTracker.Helpers;
 /// <summary>Builds an arc <see cref="PathGeometry"/> for circular progress (0..1).</summary>
 public static class RadialProgressHelper
 {
-    private const double CenterX = 90;
-    private const double CenterY = 90;
-    private const double Radius = 82;
+    private const double CenterX = 80;
+    private const double CenterY = 80;
+    private const double Radius = 76;
 
     /// <summary>Updates <paramref name="arcPath"/> to show a clockwise ring from 12 o'clock for <paramref name="percent"/> (0..1).</summary>
     public static void ApplyProgress(Path arcPath, double percent)
