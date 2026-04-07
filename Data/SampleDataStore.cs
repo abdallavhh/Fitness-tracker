@@ -110,16 +110,7 @@ public static class SampleDataStore
     {
         new() { Id = 1, Username = "user01", Email = "user01@example.com", Status = "Active" },
         new() { Id = 2, Username = "user02", Email = "user02@example.com", Status = "Active" },
-        new() { Id = 3, Username = "user03", Email = "user03@example.com", Status = "Active" },
-        new() { Id = 4, Username = "user04", Email = "user04@example.com", Status = "Active" },
-        new() { Id = 5, Username = "maria_g", Email = "maria@example.com", Status = "Active" },
-        new() { Id = 6, Username = "alex_k", Email = "alex@example.com", Status = "Active" },
-        new() { Id = 7, Username = "sam_r", Email = "sam@example.com", Status = "Active" },
-        new() { Id = 8, Username = "lisa_m", Email = "lisa@example.com", Status = "Active" },
-        new() { Id = 9, Username = "chris_p", Email = "chris@example.com", Status = "Active" },
-        new() { Id = 10, Username = "dana_q", Email = "dana@example.com", Status = "Inactive" },
-        new() { Id = 11, Username = "evan_t", Email = "evan@example.com", Status = "Active" },
-        new() { Id = 12, Username = "fiona_w", Email = "fiona@example.com", Status = "Active" }
+        new() { Id = 3, Username = "user03", Email = "user03@example.com", Status = "Active" }
     };
 
     public static int NextAdminUserId() =>
