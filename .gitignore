@@ -1,1 +1,9 @@
 .vs/
+bin/
+obj/
+*.binlog
+build.log
+build_output.log
+build_log*.txt
+build_output.txt
+build_status.txt
