@@ -6,6 +6,16 @@ namespace FitnessTracker.Helpers;
 /// <summary>Enables two-way binding of <see cref="PasswordBox.Password"/> for MVVM.</summary>
 public static class PasswordBoxAssistant
 {
+    private static readonly DependencyProperty SuppressSyncProperty = DependencyProperty.RegisterAttached(
+        "SuppressPasswordSync",
+        typeof(bool),
+        typeof(PasswordBoxAssistant),
+        new PropertyMetadata(false));
+
+    private static bool GetSuppress(DependencyObject d) => (bool)d.GetValue(SuppressSyncProperty);
+
+    private static void SetSuppress(DependencyObject d, bool value) => d.SetValue(SuppressSyncProperty, value);
+
     public static readonly DependencyProperty BoundPasswordProperty = DependencyProperty.RegisterAttached(
         "BoundPassword",
         typeof(string),
@@ -26,15 +36,19 @@ public static class PasswordBoxAssistant
 
     public static void SetBindPassword(DependencyObject d, bool value) => d.SetValue(BindPasswordProperty, value);
 
-    private static bool _internalChange;
-
     private static void OnBoundPasswordChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        if (d is not PasswordBox box || _internalChange)
+        if (d is not PasswordBox box || GetSuppress(box))
             return;
-        _internalChange = true;
-        box.Password = e.NewValue as string ?? string.Empty;
-        _internalChange = false;
+        SetSuppress(box, true);
+        try
+        {
+            box.Password = e.NewValue as string ?? string.Empty;
+        }
+        finally
+        {
+            SetSuppress(box, false);
+        }
     }
 
     private static void OnBindPasswordChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -52,10 +66,16 @@ public static class PasswordBoxAssistant
 
     private static void OnPasswordChanged(object sender, RoutedEventArgs e)
     {
-        if (sender is not PasswordBox box || _internalChange)
+        if (sender is not PasswordBox box || GetSuppress(box))
             return;
-        _internalChange = true;
-        SetBoundPassword(box, box.Password);
-        _internalChange = false;
+        SetSuppress(box, true);
+        try
+        {
+            SetBoundPassword(box, box.Password);
+        }
+        finally
+        {
+            SetSuppress(box, false);
+        }
     }
 }

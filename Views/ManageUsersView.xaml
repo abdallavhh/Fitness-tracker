@@ -122,6 +122,7 @@
                                         </Style>
                                     </DataGridTextColumn.ElementStyle>
                                 </DataGridTextColumn>
+                                <DataGridCheckBoxColumn Header="Admin" Binding="{Binding IsAdmin}" Width="64" IsReadOnly="True"/>
                                 <DataGridTemplateColumn Header="Actions" MinWidth="148" Width="SizeToCells" IsReadOnly="True"
                                                         HeaderStyle="{StaticResource GridHeaderTeal}">
                                     <DataGridTemplateColumn.CellTemplate>

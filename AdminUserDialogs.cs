@@ -1,8 +1,10 @@
+using FitnessTracker.Data;
+using FitnessTracker.Models;
+using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using FitnessTracker.Data;
 
 namespace FitnessTracker;
 
@@ -50,6 +52,9 @@ public static class AdminUserDialogs
         status.Items.Add("Inactive");
         status.SelectedIndex = 0;
         root.Children.Add(status);
+        
+        var isAdmin = new CheckBox { Content = "Admin Access", Margin = new Thickness(0, 12, 0, 0), FontSize = 14 };
+        root.Children.Add(isAdmin);
 
         var btns = new StackPanel
         {
@@ -70,19 +75,36 @@ public static class AdminUserDialogs
                 MessageBox.Show(w, "Username and email are required.", "Add user", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-            if (SampleDataStore.AdminUsers.Any(x => x.Username.Equals(u, StringComparison.OrdinalIgnoreCase)))
+            var st = status.SelectedItem?.ToString() ?? "Active";
+            
+            using var db = new AppDbContext();
+            
+            // Check duplicates in DB
+            if (db.Users.Any(x => x.User_Name.ToLower() == u.ToLower()))
             {
                 MessageBox.Show(w, "That username is already taken.", "Add user", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-            if (SampleDataStore.AdminUsers.Any(x => x.Email.Equals(em, StringComparison.OrdinalIgnoreCase)))
+            if (db.Users.Any(x => x.Email.ToLower() == em.ToLower()))
             {
                 MessageBox.Show(w, "That email is already registered.", "Add user", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            var st = status.SelectedItem?.ToString() ?? "Active";
-            created = SampleDataStore.AddAdminUser(u, em, st);
+            var nextId = db.Users.Any() ? db.Users.Max(x => x.User_ID) + 1 : 1;
+            var newUser = new User 
+            { 
+                User_ID = nextId,
+                User_Name = u, 
+                Email = em, 
+                Password = "password123",
+                IsAdmin = isAdmin.IsChecked == true
+            };
+            
+            db.Users.Add(newUser);
+            db.SaveChanges();
+
+            created = new UserRecord { Id = newUser.User_ID, Username = u, Email = em, Status = st, IsAdmin = newUser.IsAdmin };
             w.DialogResult = true;
         };
         cancel.Click += (_, _) => { w.DialogResult = false; };
@@ -135,6 +157,10 @@ public static class AdminUserDialogs
         status.Items.Add("Active");
         status.Items.Add("Inactive");
         status.SelectedItem = user.Status is "Active" or "Inactive" ? user.Status : "Active";
+        root.Children.Add(status);
+
+        var isAdmin = new CheckBox { Content = "Admin Access", Margin = new Thickness(0, 12, 0, 0), FontSize = 14, IsChecked = user.IsAdmin };
+        root.Children.Add(isAdmin);
 
         var btns = new StackPanel
         {
@@ -155,13 +181,14 @@ public static class AdminUserDialogs
                 return;
             }
 
-            if (SampleDataStore.AdminUsers.Any(x => !ReferenceEquals(x, user) && x.Username.Equals(u, StringComparison.OrdinalIgnoreCase)))
+            using var db = new AppDbContext();
+            if (db.Users.Any(x => x.User_ID != user.Id && x.User_Name.ToLower() == u.ToLower()))
             {
                 MessageBox.Show(w, "That username is already taken.", "Edit user", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            if (SampleDataStore.AdminUsers.Any(x => !ReferenceEquals(x, user) && x.Email.Equals(em, StringComparison.OrdinalIgnoreCase)))
+            if (db.Users.Any(x => x.User_ID != user.Id && x.Email.ToLower() == em.ToLower()))
             {
                 MessageBox.Show(w, "That email is already registered.", "Edit user", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
@@ -169,6 +196,7 @@ public static class AdminUserDialogs
 
             user.Username = u;
             user.Email = em;
+            user.IsAdmin = isAdmin.IsChecked == true;
             user.Status = status.SelectedItem?.ToString() ?? "Active";
             w.DialogResult = true;
         };

@@ -7,17 +7,21 @@ using FitnessTracker.Models;
 
 namespace FitnessTracker.ViewModels;
 
-/// <summary>Meal list with search filter and add-meal dialog.</summary>
+/// <summary>Meal list with search filter and add-meal dialog (persisted to SQLite).</summary>
 public sealed class MealsViewModel : ViewModelBase
 {
-    private readonly CollectionViewSource _mealsView = new() { Source = SampleDataStore.Meals };
+    private readonly CollectionViewSource _mealsView;
     private string _searchQuery = string.Empty;
 
     public MealsViewModel()
     {
+        var source = AppSession.CurrentUserId is int uid
+            ? UserDataQueries.LoadMeals(uid)
+            : new ObservableCollection<MealEntryModel>();
+        _mealsView = new CollectionViewSource { Source = source };
         _mealsView.Filter += OnMealFilter;
         MealsView = _mealsView.View!;
-        AddMealCommand = new RelayCommand(_ => AddMeal());
+        AddMealCommand = new RelayCommand(_ => AddMeal(), _ => AppSession.CurrentUserId.HasValue);
     }
 
     public ICollectionView MealsView { get; }
@@ -55,14 +59,24 @@ public sealed class MealsViewModel : ViewModelBase
 
     private void AddMeal()
     {
+        if (AppSession.CurrentUserId is not int uid)
+            return;
+
         var owner = Application.Current.MainWindow;
         if (owner is null)
             return;
         var meal = EntryDialogs.PromptMeal(owner);
-        if (meal is not null)
+        if (meal is null)
+            return;
+
+        UserDataQueries.AddMeal(uid, meal);
+        if (_mealsView.Source is ObservableCollection<MealEntryModel> col)
         {
-            SampleDataStore.Meals.Add(meal);
-            _mealsView.View?.Refresh();
+            col.Clear();
+            foreach (var x in UserDataQueries.LoadMeals(uid))
+                col.Add(x);
         }
+
+        _mealsView.View?.Refresh();
     }
 }

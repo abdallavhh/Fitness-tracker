@@ -35,6 +35,13 @@ public sealed class UserRecord : INotifyPropertyChanged
         set => SetField(ref _status, value);
     }
 
+    private bool _isAdmin;
+    public bool IsAdmin
+    {
+        get => _isAdmin;
+        set => SetField(ref _isAdmin, value);
+    }
+
     public string Initials => Username.Length >= 2
         ? Username[..2].ToUpperInvariant()
         : Username.ToUpperInvariant();

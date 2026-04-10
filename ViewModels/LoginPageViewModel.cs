@@ -1,5 +1,7 @@
 using System.Windows;
 using FitnessTracker.Data;
+using FitnessTracker.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace FitnessTracker.ViewModels;
 
@@ -82,6 +84,10 @@ public sealed class LoginPageViewModel : ViewModelBase
         HasError = true;
     }
 
+    /// <summary>Built-in administrator account (not in SQL seed); use any seeded user for normal login.</summary>
+    private const string BuiltinAdminUsername = "admin";
+    private const string BuiltinAdminPassword = "admin";
+
     private void TryLogin()
     {
         ClearError();
@@ -94,46 +100,48 @@ public sealed class LoginPageViewModel : ViewModelBase
             return;
         }
 
-        if (!ValidateCredentials(u, p))
+        if (string.Equals(u, BuiltinAdminUsername, StringComparison.OrdinalIgnoreCase))
+        {
+            if (p != BuiltinAdminPassword)
+            {
+                ShowError("Invalid username or password");
+                Password = string.Empty;
+                return;
+            }
+
+            ApplyBuiltinAdminSession(u);
+            Reset();
+            _shell.OnLoginCompleted();
+            return;
+        }
+
+        using var db = new AppDbContext();
+        var user = db.Users.AsNoTracking().FirstOrDefault(x => x.User_Name == u && x.Password == p);
+        if (user is null)
         {
             ShowError("Invalid username or password");
             Password = string.Empty;
             return;
         }
 
-        ApplySession(u);
+        ApplySessionFromUser(user);
         Reset();
         _shell.OnLoginCompleted();
     }
 
-    private static bool ValidateCredentials(string username, string password)
+    private static void ApplyBuiltinAdminSession(string usernameEntered)
     {
-        if (username.Equals("demo", StringComparison.OrdinalIgnoreCase)
-            && password.Equals("password", StringComparison.Ordinal))
-            return true;
-
-        if (username.Equals("admin", StringComparison.OrdinalIgnoreCase))
-        {
-            return password.Equals("password", StringComparison.Ordinal)
-                || password.Equals("admin", StringComparison.Ordinal)
-                || password.Equals("!", StringComparison.Ordinal);
-        }
-
-        return false;
+        AppSession.Username = usernameEntered;
+        AppSession.IsAdmin = true;
+        AppSession.CurrentUserId = null;
+        AppSession.DisplayName = "Administrator";
     }
 
-    private static void ApplySession(string username)
+    private static void ApplySessionFromUser(User user)
     {
-        AppSession.Username = username;
-        if (username.Equals("admin", StringComparison.OrdinalIgnoreCase))
-        {
-            AppSession.IsAdmin = true;
-            AppSession.DisplayName = "Admin";
-        }
-        else
-        {
-            AppSession.IsAdmin = false;
-            AppSession.DisplayName = SampleDataStore.Profile.Username;
-        }
+        AppSession.Username = user.User_Name;
+        AppSession.CurrentUserId = user.User_ID;
+        AppSession.IsAdmin = user.IsAdmin;
+        AppSession.DisplayName = user.User_Name;
     }
 }

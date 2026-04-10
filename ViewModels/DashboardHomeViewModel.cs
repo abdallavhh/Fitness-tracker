@@ -2,11 +2,10 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using FitnessTracker.Data;
 using FitnessTracker.Models;
-using FitnessTracker;
 
 namespace FitnessTracker.ViewModels;
 
-/// <summary>Home dashboard: daily goal ring, summary cards, and activity feed (sample data).</summary>
+/// <summary>Home dashboard: daily goal ring, summary cards, and activity feed from SQLite.</summary>
 public sealed class DashboardHomeViewModel : ViewModelBase
 {
     private readonly MainWindowViewModel _shell;
@@ -19,27 +18,52 @@ public sealed class DashboardHomeViewModel : ViewModelBase
         AppSession.ProfileImageChanged += (_, _) => OnPropertyChanged(nameof(ProfileImagePath));
         _dateDisplay = DateTime.Now.ToString("dddd, MMMM d, yyyy", CultureInfo.CurrentCulture);
 
-        var d = SampleDataStore.Dashboard;
-        DailyGoalFraction = d.DailyGoalPercent;
-        DailyGoalPercentText = $"{(int)(d.DailyGoalPercent * 100)}%";
-        CaloriesCurrent = d.CaloriesCurrent;
-        CaloriesTarget = d.CaloriesTarget;
-        CaloriesRatioText = $"{d.CaloriesCurrent}/{d.CaloriesTarget}";
-        WaterCurrent = d.WaterGlassesCurrent;
-        WaterTarget = d.WaterGlassesTarget;
-        WaterRatioText = $"{d.WaterGlassesCurrent}/{d.WaterGlassesTarget} Glasses";
-        ExerciseCurrent = d.ExerciseMinutesCurrent;
-        ExerciseTarget = d.ExerciseMinutesTarget;
-        ExerciseRatioText = $"{d.ExerciseMinutesCurrent}/{d.ExerciseMinutesTarget} min";
-        MealsCurrent = d.MealsLogged;
-        MealsTarget = d.MealsTarget;
-        MealsRatioText = $"{d.MealsLogged}/{d.MealsTarget}";
-        CaloriesProgress = d.CaloriesProgress;
-        WaterProgress = d.WaterProgress;
-        ExerciseProgress = d.ExerciseProgress;
-        MealsProgress = d.MealsProgress;
+        if (AppSession.CurrentUserId is int uid)
+        {
+            var d = UserDataQueries.BuildDashboardSummary(uid);
+            DailyGoalFraction = d.DailyGoalPercent;
+            DailyGoalPercentText = $"{(int)(d.DailyGoalPercent * 100)}%";
+            CaloriesCurrent = d.CaloriesCurrent;
+            CaloriesTarget = d.CaloriesTarget;
+            CaloriesRatioText = $"{d.CaloriesCurrent}/{d.CaloriesTarget}";
+            WaterCurrent = d.WaterGlassesCurrent;
+            WaterTarget = d.WaterGlassesTarget;
+            WaterRatioText = $"{d.WaterGlassesCurrent}/{d.WaterGlassesTarget} Glasses";
+            ExerciseCurrent = d.ExerciseMinutesCurrent;
+            ExerciseTarget = d.ExerciseMinutesTarget;
+            ExerciseRatioText = $"{d.ExerciseMinutesCurrent}/{d.ExerciseMinutesTarget} min";
+            MealsCurrent = d.MealsLogged;
+            MealsTarget = d.MealsTarget;
+            MealsRatioText = $"{d.MealsLogged}/{d.MealsTarget}";
+            CaloriesProgress = d.CaloriesProgress;
+            WaterProgress = d.WaterProgress;
+            ExerciseProgress = d.ExerciseProgress;
+            MealsProgress = d.MealsProgress;
+            ActivityItems = new ObservableCollection<ActivityFeedItemModel>(UserDataQueries.BuildActivityFeed(uid));
+        }
+        else
+        {
+            DailyGoalFraction = 0;
+            DailyGoalPercentText = "0%";
+            CaloriesCurrent = 0;
+            CaloriesTarget = 2000;
+            CaloriesRatioText = "0/2000";
+            WaterCurrent = 0;
+            WaterTarget = 8;
+            WaterRatioText = "0/8 Glasses";
+            ExerciseCurrent = 0;
+            ExerciseTarget = 60;
+            ExerciseRatioText = "0/60 min";
+            MealsCurrent = 0;
+            MealsTarget = 5;
+            MealsRatioText = "0/5";
+            CaloriesProgress = 0;
+            WaterProgress = 0;
+            ExerciseProgress = 0;
+            MealsProgress = 0;
+            ActivityItems = [];
+        }
 
-        ActivityItems = new ObservableCollection<ActivityFeedItemModel>(SampleDataStore.TodayActivity);
         OpenProfileCommand = new RelayCommand(_ => _shell.NavigateTo("Profile"));
     }
 

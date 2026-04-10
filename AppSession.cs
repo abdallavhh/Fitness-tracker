@@ -39,6 +39,9 @@ public static class AppSession
 
     public static bool IsAdmin { get; set; }
 
+    /// <summary>Primary key of the logged-in app user (not set for built-in admin login).</summary>
+    public static int? CurrentUserId { get; set; }
+
     /// <summary>Raised when <see cref="DisplayName"/> changes (e.g. profile save).</summary>
     public static event EventHandler? DisplayNameChanged;
     
@@ -49,6 +52,8 @@ public static class AppSession
     {
         Username = string.Empty;
         IsAdmin = false;
+        CurrentUserId = null;
         DisplayName = "User";
+        ProfileImagePath = null;
     }
 }

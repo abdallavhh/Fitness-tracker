@@ -1,17 +1,18 @@
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Globalization;
-using System.Linq;
-using System.Windows;
-using System.Windows.Data;
-using FitnessTracker.Data;
-
 namespace FitnessTracker.ViewModels;
-
+using FitnessTracker.Models;
+using FitnessTracker.Data;
+using System;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Windows.Data;
+using System.ComponentModel;
+using System.Windows;
+using System.Globalization;
 /// <summary>Admin user grid with search / ID filter and edit-delete actions (demo).</summary>
 public sealed class ManageUsersViewModel : ViewModelBase
 {
-    private readonly CollectionViewSource _cvs = new() { Source = SampleDataStore.AdminUsers };
+    private readonly ObservableCollection<UserRecord> _usersCollection = new();
+    private readonly CollectionViewSource _cvs;
     private bool _filterByExactId;
     private int _exactId;
     private string _generalQuery = string.Empty;
@@ -22,8 +23,11 @@ public sealed class ManageUsersViewModel : ViewModelBase
 
     public ManageUsersViewModel()
     {
+        _cvs = new CollectionViewSource { Source = _usersCollection };
         _cvs.Filter += OnFilter;
-        SampleDataStore.AdminUsers.CollectionChanged += OnAdminUsersChanged;
+        
+        LoadUsersFromDatabase();
+
         EditUserCommand = new RelayCommand(p =>
         {
             if (p is not UserRecord u)
@@ -33,6 +37,7 @@ public sealed class ManageUsersViewModel : ViewModelBase
                 return;
             if (AdminUserDialogs.PromptEditUser(owner, u))
             {
+                UpdateUserInDatabase(u);
                 _cvs.View?.Refresh();
                 UpdateFooter();
             }
@@ -43,7 +48,9 @@ public sealed class ManageUsersViewModel : ViewModelBase
                 return;
             if (MessageBox.Show($"Delete user ID {u.Id}?", "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes)
                 return;
-            SampleDataStore.AdminUsers.Remove(u);
+            
+            DeleteUserFromDatabase(u.Id);
+            _usersCollection.Remove(u);
             RefreshFilters();
         });
         AddUserCommand = new RelayCommand(_ =>
@@ -53,19 +60,55 @@ public sealed class ManageUsersViewModel : ViewModelBase
                 return;
             var created = AdminUserDialogs.PromptAddUser(owner);
             if (created is not null)
-                RefreshFilters();
+                LoadUsersFromDatabase();
         });
 
         RefreshFilters();
     }
 
-    private void OnAdminUsersChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    private void LoadUsersFromDatabase()
     {
-        Application.Current?.Dispatcher.InvokeAsync(() =>
+        using var db = new AppDbContext();
+        var users = db.Users.ToList();
+        
+        _usersCollection.Clear();
+        foreach (var u in users)
         {
-            RefreshFilters();
-        });
+            _usersCollection.Add(new UserRecord
+            {
+                Id = u.User_ID,
+                Username = u.User_Name,
+                Email = u.Email,
+                IsAdmin = u.IsAdmin,
+                Status = "Active" // Default for entities from DB script
+            });
+        }
     }
+
+    private void UpdateUserInDatabase(UserRecord record)
+    {
+        using var db = new AppDbContext();
+        var u = db.Users.Find(record.Id);
+        if (u != null)
+        {
+            u.User_Name = record.Username;
+            u.Email = record.Email;
+            u.IsAdmin = record.IsAdmin;
+            db.SaveChanges();
+        }
+    }
+
+    private void DeleteUserFromDatabase(int id)
+    {
+        using var db = new AppDbContext();
+        var u = db.Users.Find(id);
+        if (u != null)
+        {
+            db.Users.Remove(u);
+            db.SaveChanges();
+        }
+    }
+
 
     public ICollectionView UsersView => _cvs.View!;
 
@@ -150,7 +193,7 @@ public sealed class ManageUsersViewModel : ViewModelBase
             _exactId = id;
             _cvs.View?.Refresh();
 
-            var match = SampleDataStore.AdminUsers.FirstOrDefault(u => u.Id == id);
+            var match = _usersCollection.FirstOrDefault(u => u.Id == id);
             if (match is not null)
                 IdSearchMessage = null;
             else
@@ -179,11 +222,11 @@ public sealed class ManageUsersViewModel : ViewModelBase
 
     private void UpdateFooter()
     {
-        var total = SampleDataStore.AdminUsers.Count;
+        var total = _usersCollection.Count;
         var visible = CountVisible(_cvs.View);
         if (_filterByExactId)
         {
-            var exists = SampleDataStore.AdminUsers.Any(u => u.Id == _exactId);
+            var exists = _usersCollection.Any(u => u.Id == _exactId);
             FooterText = exists
                 ? $"User ID {_exactId} — profile shown below."
                 : $"No profile for ID {_exactId}.";

@@ -3,10 +3,11 @@ using System.Windows;
 using Microsoft.Win32;
 using System.Windows.Media.Imaging;
 using FitnessTracker.Data;
+using FitnessTracker.Models;
 
 namespace FitnessTracker.ViewModels;
 
-/// <summary>User profile fields bound to sample profile data with save to store.</summary>
+/// <summary>User profile fields loaded from SQLite (dietary preference is UI-only).</summary>
 public sealed class UserProfileViewModel : ViewModelBase
 {
     private readonly MainWindowViewModel _shell;
@@ -23,12 +24,12 @@ public sealed class UserProfileViewModel : ViewModelBase
     public UserProfileViewModel(MainWindowViewModel shell)
     {
         _shell = shell;
-        LoadFromStore();
+        LoadFromDatabase();
         GoBackCommand = new RelayCommand(_ => _shell.NavigateTo("Dashboard"));
         EditCommand = new RelayCommand(_ => IsEditMode = true, _ => !IsEditMode);
         SaveCommand = new RelayCommand(_ => SaveProfile(), _ => IsEditMode);
         UploadImageCommand = new RelayCommand(_ => UploadImage());
-        
+
         AppSession.ProfileImageChanged += (_, _) => OnPropertyChanged(nameof(ProfileImagePath));
     }
 
@@ -50,10 +51,7 @@ public sealed class UserProfileViewModel : ViewModelBase
         set => SetProperty(ref _username, value);
     }
 
-    public string? ProfileImagePath
-    {
-        get => AppSession.ProfileImagePath;
-    }
+    public string? ProfileImagePath => AppSession.ProfileImagePath;
 
     public string Gender
     {
@@ -111,14 +109,24 @@ public sealed class UserProfileViewModel : ViewModelBase
         };
 
         if (openFileDialog.ShowDialog() == true)
-        {
             AppSession.ProfileImagePath = openFileDialog.FileName;
-        }
     }
 
-    private void LoadFromStore()
+    private void LoadFromDatabase()
     {
-        var p = SampleDataStore.Profile;
+        if (AppSession.CurrentUserId is not int uid)
+        {
+            Username = AppSession.DisplayName;
+            return;
+        }
+
+        var p = UserDataQueries.LoadUserProfile(uid);
+        if (p is null)
+        {
+            Username = AppSession.DisplayName;
+            return;
+        }
+
         Username = p.Username;
         Gender = p.Gender;
         Age = p.Age.ToString(CultureInfo.CurrentCulture);
@@ -131,6 +139,12 @@ public sealed class UserProfileViewModel : ViewModelBase
 
     private void SaveProfile()
     {
+        if (AppSession.CurrentUserId is not int uid)
+        {
+            MessageBox.Show("No user profile is loaded for this account.", "Profile", MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
+
         if (string.IsNullOrWhiteSpace(Username))
         {
             MessageBox.Show("Username is required.", "Profile", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -161,15 +175,19 @@ public sealed class UserProfileViewModel : ViewModelBase
             return;
         }
 
-        var p = SampleDataStore.Profile;
-        p.Username = Username.Trim();
-        p.Gender = Gender.Trim();
-        p.Age = age;
-        p.HeightCm = h;
-        p.WeightKg = w;
-        p.MedicalCondition = string.IsNullOrWhiteSpace(MedicalCondition) ? "—" : MedicalCondition.Trim();
-        p.DietaryPreference = DietaryPreference.Trim();
-        p.TargetWeightKg = tw;
+        var p = new UserProfileModel
+        {
+            Username = Username.Trim(),
+            Gender = Gender.Trim(),
+            Age = age,
+            HeightCm = h,
+            WeightKg = w,
+            MedicalCondition = string.IsNullOrWhiteSpace(MedicalCondition) ? "—" : MedicalCondition.Trim(),
+            DietaryPreference = DietaryPreference.Trim(),
+            TargetWeightKg = tw
+        };
+
+        UserDataQueries.SaveUserProfile(uid, p);
 
         if (!AppSession.IsAdmin)
             AppSession.DisplayName = p.Username;
