@@ -155,14 +155,10 @@
                         <TextBlock Text="admin" Foreground="{StaticResource Brush.TextMuted}" FontSize="11"/>
                     </StackPanel>
 
-                    <StackPanel Grid.Column="1">
-                        <TextBlock Text="USER" Style="{StaticResource MutedLabelTextStyle}" FontSize="11" Margin="0,0,0,4"/>
-                        <TextBlock Text="Mona" FontWeight="SemiBold" FontSize="12"/>
-                        <TextBlock Text="m0n@!" Foreground="{StaticResource Brush.TextMuted}" FontSize="11"/>
-                    </StackPanel>
+                  
 
 					<StackPanel Grid.Column="1">
-						<TextBlock Text="ANOTHER USER" Style="{StaticResource MutedLabelTextStyle}" FontSize="11" Margin="0,0,0,4"/>
+						<TextBlock Text="USER" Style="{StaticResource MutedLabelTextStyle}" FontSize="11" Margin="0,0,0,4"/>
 						<TextBlock Text="Ahmed" FontWeight="SemiBold" FontSize="12"/>
 						<TextBlock Text="pwd123" Foreground="{StaticResource Brush.TextMuted}" FontSize="11"/>
 					</StackPanel>
