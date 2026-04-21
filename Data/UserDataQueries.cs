@@ -476,4 +476,62 @@ public static class UserDataQueries
         logDate.HasValue
             ? logDate.Value.ToString("MMM d", CultureInfo.CurrentCulture)
             : "—";
+    public static void GenerateMockGraphData(int userId)
+    {
+        using var db = new AppDbContext();
+        var random = new Random();
+        var exerciseNames = new[] { "Running", "Cycling", "Swimming", "HIIT", "Rowing", "Elliptical" };
+
+        for (int i = 0; i < 7; i++)
+        {
+            var targetDate = DateTime.Today.AddDays(-i);
+
+            var log = db.DailyLogs.FirstOrDefault(d => 
+                d.User_ID == userId && 
+                d.Log_Date != null && 
+                d.Log_Date.Value.Date == targetDate);
+
+            if (log == null)
+            {
+                var lastLog = db.DailyLogs
+                    .Where(d => d.User_ID == userId)
+                    .OrderByDescending(d => d.Log_Date)
+                    .FirstOrDefault();
+
+                var weight = lastLog?.Weight ?? 70m;
+                var nextLogId = db.DailyLogs.Any() ? db.DailyLogs.Max(d => d.Log_ID) + 1 : 1;
+
+                log = new DailyLog 
+                { 
+                    Log_ID = nextLogId, 
+                    User_ID = userId, 
+                    Log_Date = targetDate, 
+                    Weight = weight 
+                };
+                db.DailyLogs.Add(log);
+                db.SaveChanges();
+            }
+
+            // Only add mock exercises if there aren't any for this log to prevent duplication on multiple runs
+            var existingExercises = db.ExerciseLogs.Count(e => e.Log_ID == log.Log_ID);
+            if (existingExercises == 0)
+            {
+                int numExercises = random.Next(1, 3); // 1 or 2 exercises
+                for (int e = 0; e < numExercises; e++)
+                {
+                    var nextExId = db.ExerciseLogs.Any() ? db.ExerciseLogs.Max(ex => ex.Exercise_ID) + 1 : 1;
+                    db.ExerciseLogs.Add(new ExerciseLog
+                    {
+                        Exercise_ID = nextExId,
+                        Log_ID = log.Log_ID,
+                        Exercise_Name = exerciseNames[random.Next(exerciseNames.Length)],
+                        Exercise_Type = "Cardio",
+                        Calories_Burned = random.Next(200, 701), // between 200 and 700
+                        Duration = random.Next(30, 61) // between 30 and 60 mins
+                    });
+                    db.SaveChanges();
+                }
+            }
+        }
+    }
 }
